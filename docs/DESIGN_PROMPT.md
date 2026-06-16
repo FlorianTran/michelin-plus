@@ -43,6 +43,10 @@ Whoop/visionOS) :
 - Layouts en GRILLE BENTO (tuiles modulaires de tailles variées) pour les dashboards.
 - Cartes GLASSMORPHISM 2.0 (verre dépoli, bordures fines lumineuses) sur fond near-black.
 - AURORA / MESH GLOW en arrière-plan (halos dégradés bleu→or) pour la profondeur.
+- IMAGERIE : photos cyclisme réelles (col de montagne, route, gravel, peloton) en FILTRE NOIR & BLANC
+  / désaturé, en fond, avec OVERLAY DÉGRADÉ NOIR fort (~70-90%) → profondeur + émotion aventure,
+  lisibilité AA préservée. La couleur ne vit que dans l'UI (jaune/or), pas dans la photo.
+  Hero landing, en-têtes de section, fiche drop édition limitée. (démo : Unsplash/Pexels libres)
 - COMPTEURS KINÉTIQUES (points qui montent, jauges qui se remplissent), reveals au scroll.
 
 INGRÉDIENTS WOW (différenciateurs) :

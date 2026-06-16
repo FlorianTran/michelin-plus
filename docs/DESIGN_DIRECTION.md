@@ -55,7 +55,9 @@ Le jury note **« cohérence avec la marque Michelin » (UX, 3 pts)** ET **« au
 
 ## Les ingrédients du wow (ce qui fait l'effet en démo)
 
-1. **Hero immersif sombre** : fonds `#000C34` / `#00205B` (charte = OK pour l'immersif) avec **dégradés profonds** bleu→nuit, **grain/texture** subtile, un pneu/Bibendum en visuel fort. Le jaune **éclate** dessus.
+1. **Hero immersif sombre** : fonds `#08090F` / `#00205B` avec **dégradés profonds** noir→nuit, **grain/texture** subtile. Le jaune/or **éclate** dessus.
+   - **Imagerie (recommandé)** : **photo cyclisme réelle** (col de montagne, route en lacets, gravel, peloton) en **filtre noir & blanc / désaturé**, posée en fond avec **overlay dégradé noir** (opacité forte, ~70-90% en bas) → on garde la profondeur & l'émotion « aventure » sans casser la lisibilité ni le contraste AA. La couleur ne vit que dans l'UI (jaune/or), pas dans la photo. Idéal pour le hero landing + en-têtes de section + fiche « drop » édition limitée.
+   - Sources : banque d'images libres (Unsplash/Pexels « cycling mountain road b&w ») pour la démo ; à remplacer par de l'imagerie Michelin/sponsor en prod.
 2. **Mouvement (Framer Motion)** — c'est LE différenciateur low-cost :
    - compteur de **points qui s'incrémente** à l'activation,
    - **jauge de palier** qui se remplit,
