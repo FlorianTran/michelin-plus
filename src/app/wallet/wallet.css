@@ -1,0 +1,77 @@
+/* Wallet — vitrine (showcase) for the digital loyalty card going to Apple/Google Wallet. */
+.wallet { min-height: 100vh; position: relative; }
+.wallet__aurora {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(46% 40% at 80% 0%, rgba(232, 194, 74, 0.10), transparent 60%),
+    radial-gradient(40% 36% at 12% 4%, rgba(150, 110, 40, 0.08), transparent 60%),
+    radial-gradient(55% 45% at 12% 100%, rgba(39, 80, 155, 0.16), transparent 64%);
+}
+.wallet__main {
+  position: relative; z-index: 1; max-width: var(--container-wide); margin-inline: auto;
+  padding: clamp(28px, 4vw, 56px) clamp(16px, 4vw, 40px) 72px;
+}
+
+.wallet__head { max-width: 720px; margin-bottom: clamp(28px, 4vw, 44px); }
+.wallet__head .mch-title { font-size: clamp(2rem, 4vw, 3rem); margin: 10px 0 0; }
+.wallet__head .mch-lead { margin: 14px 0 0; }
+.wallet__eyebrow-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* Showcase grid: big card on the left, wallet add-CTAs on the right. */
+.wallet__showcase {
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 22px; align-items: stretch;
+  margin-bottom: 22px;
+}
+.wallet__card-tile { display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+.wallet__card-tile .mch-mcard { max-width: 460px; margin-inline: auto; }
+.wallet__card-caption {
+  font-family: var(--font-body); font-size: 0.8125rem; color: var(--text-tertiary);
+  text-align: center; max-width: 460px; margin-inline: auto;
+}
+
+.wallet__add-tile { display: flex; flex-direction: column; gap: 18px; }
+.wallet__add-tile h2 {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.25rem;
+  text-transform: uppercase; letter-spacing: -0.01em; color: #fff; margin: 0;
+}
+.wallet__add-tile p { font-family: var(--font-body); font-size: 0.875rem; color: var(--text-secondary); margin: 0; }
+
+.wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 14px 16px; border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border);
+}
+.wallet-cta__btn {
+  display: inline-flex; align-items: center; gap: 12px; min-width: 0;
+}
+.wallet-cta__logo {
+  width: 34px; height: 34px; border-radius: 9px; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #000; border: 1px solid var(--border-bright); color: #fff;
+}
+.wallet-cta__txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.wallet-cta__small { font-family: var(--font-body); font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); }
+.wallet-cta__big { font-family: var(--font-body); font-weight: 700; font-size: 0.9375rem; color: var(--text-primary); }
+
+.wallet__add-note {
+  font-family: var(--font-body); font-size: 0.75rem; color: var(--text-tertiary);
+  border-top: 1px solid var(--border-soft); padding-top: 14px; margin: 0;
+}
+
+/* Supporting copy row: physical card + NFC future. */
+.wallet__info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.wallet-info-tile { display: flex; flex-direction: column; gap: 10px; }
+.wallet-info-tile__ic {
+  width: 42px; height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(232, 194, 74, 0.10); border: 1px solid rgba(232, 194, 74, 0.28); color: var(--gold-400);
+}
+.wallet-info-tile h3 {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.0625rem;
+  text-transform: uppercase; letter-spacing: -0.01em; color: #fff; margin: 4px 0 0;
+}
+.wallet-info-tile p { font-family: var(--font-body); font-size: 0.875rem; color: var(--text-secondary); margin: 0; }
+
+@media (max-width: 980px) {
+  .wallet__showcase { grid-template-columns: 1fr; }
+  .wallet__info { grid-template-columns: 1fr; }
+}
