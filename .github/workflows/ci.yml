@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'feat/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Lint · Test · Build
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: michelin
+          POSTGRES_PASSWORD: michelin
+          POSTGRES_DB: michelin_plus
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U michelin -d michelin_plus"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://michelin:michelin@localhost:5432/michelin_plus?schema=public
+      SESSION_SECRET: ci-michelin-plus-session-secret-32-bytes-minimum-ok
+      DEBUG_TOKEN: grip
+      NEXT_TELEMETRY_DISABLED: '1'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate + push schema
+        run: |
+          npx prisma generate
+          npx prisma db push --skip-generate
+
+      - name: Seed demo data
+        run: npm run db:seed
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests (loyalty engine)
+        run: npm test
+
+      - name: Type-check
+        run: npm run type-check
+
+      - name: Build
+        run: npx next build

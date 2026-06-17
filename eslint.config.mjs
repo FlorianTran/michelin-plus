@@ -1,21 +1,17 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+import next from 'eslint-config-next';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
+/** Flat config — eslint-config-next v16 ships a native flat config array. */
 const eslintConfig = [
-  ...compat.config({
-    extends: ['next/core-web-vitals', 'next/typescript'],
+  ...next,
+  {
+    // rAF count-up / gauge-fill effects legitimately seed state on mount;
+    // the new react-hooks rule over-flags this animation pattern.
+    files: ['**/*.{ts,tsx}'],
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'react-hooks/set-state-in-effect': 'off',
     },
-  }),
-  { ignores: ['.next/**', 'node_modules/**', 'prisma/generated/**'] },
+  },
+  { ignores: ['.next/**', 'node_modules/**', 'prisma/generated/**', 'next-env.d.ts'] },
 ];
 
 export default eslintConfig;
