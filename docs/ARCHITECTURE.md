@@ -32,7 +32,7 @@ Navigateur ──► Next.js (RSC + Route Handlers) ──► Prisma ──► P
 `prisma/schema.prisma`. Le total de points d'un membre = **somme de ses `PointsEntry`**
 (source de vérité unique ; aucune colonne dénormalisée à maintenir).
 
-- **User** `(id, email, passwordHash, name, role: member|ambassador|admin, memberId, sinceYear)`
+- **User** `(id, email, passwordHash, name, role: member|ambassador|admin, memberId, sinceYear, referralCode @unique, referredById)` — `referredBy`/`referrals` self-relation pour le parrainage.
 - **PointsEntry** `(userId, type: purchase|km|referral|bonus|season, amount, label, meta, createdAt)` — le grand livre ; `totalPoints = Σ amount`.
 - **Activity** `(userId, name, distanceKm, elevation, date, pointsAwarded, source: strava_mock|purchase|tier)` — alimente le feed d'activité.
 - **CardCode** `(code, kind: activation|ambassador, pointsValue, productLabel, used, usedByUserId)` — activation réelle, à usage unique.
@@ -65,6 +65,7 @@ arithmétique d'activation).
 | `GET /api/dashboard` | état agrégé (points, palier, stats, feed, prochaine récompense) | membre |
 | `GET /api/clan/[id]/leaderboard` | classement du clan par km | public |
 | `GET /api/rewards` · `POST /api/rewards/[id]/redeem` | catalogue + déblocage (gate par palier) | membre |
+| `GET /api/referral/me` | parrainage : code, lien, filleuls, points gagnés | membre |
 | `GET /api/ambassador/me` | données ambassadeur (seedé) ; 403 si non-ambassadeur | ambassadeur |
 | `GET /api/season/current` | passe de saison + progression | public |
 | `POST /api/debug/[action]` | `addPoints` · `addKm` · `activateCode` · `setTier` · `redeem` · `triggerToast` · `reset` | `DEBUG_TOKEN` |

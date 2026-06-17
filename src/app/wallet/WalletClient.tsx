@@ -152,6 +152,21 @@ export function WalletClient({ card, authed }: WalletClientProps) {
           </Card>
         </section>
 
+        <section className="wallet__physical">
+          <div className="wallet__physical-media">
+            <img src="/cards/card-carbon-premium.png" alt="Carte physique Michelin+ en carbone, liseré or" />
+          </div>
+          <div className="wallet__physical-copy">
+            <Badge tone="prestige" dot>Paliers hauts · Bientôt</Badge>
+            <h2 className="mch-title" style={{ fontSize: 'var(--fs-display-lg)' }}>La carte physique, en <em style={{ fontStyle: 'normal', color: 'var(--gold-400)' }}>carbone</em>.</h2>
+            <p className="mch-lead">
+              Aux paliers Titane et Carbone, reçois une carte métal NFC gravée à ton nom — liseré or,
+              fibre de carbone tissée. Utilisable chez les revendeurs partenaires : un geste au comptoir
+              crédite tes points et confirme ton statut.
+            </p>
+          </div>
+        </section>
+
         <section className="wallet__info">
           {INFO_TILES.map((t) => (
             <Card key={t.title} variant="solid" padding="lg" className="wallet-info-tile">

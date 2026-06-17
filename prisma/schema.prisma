@@ -29,6 +29,7 @@ enum ActivitySource {
   strava_mock
   purchase
   tier
+  referral
 }
 
 enum CardKind {
@@ -51,6 +52,8 @@ model User {
   avatarUrl    String?
   memberId     String? // e.g. "M+ 0042 1180"
   sinceYear    String? // e.g. "2024"
+  referralCode String?  @unique // shareable parrainage code
+  referredById String? // who invited this user (set once at signup)
   createdAt    DateTime @default(now())
 
   pointsEntries   PointsEntry[]
@@ -61,6 +64,8 @@ model User {
   ownedClans      Clan[]              @relation("ClanAmbassador")
   ambassador      AmbassadorProfile?
   seasonProgress  SeasonProgress[]
+  referredBy      User?               @relation("Referrals", fields: [referredById], references: [id])
+  referrals       User[]              @relation("Referrals")
 }
 
 model PointsEntry {

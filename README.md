@@ -74,7 +74,9 @@ complet de la démo. Indispensable pour piloter la présentation sans dépendre 
 | `/ambassador-dashboard` | Espace ambassadeur (code, commission, clan) | **DB réelle** |
 | `/programme-ambassadeur` | Recrutement ambassadeur (Romain Bardet) | statique |
 | `/passe-saison` | Passe Saison « L'Ascension » (ladder + missions) | **DB réelle** |
-| `/wallet` | Vitrine carte digitale (Apple/Google Wallet « Bientôt ») | vitrine |
+| `/parrainage` | Parrainage : lien partageable, filleuls, points gagnés | **DB réelle** |
+| `/parrainage/[code]` | Page d'invitation publique (« X t'invite ») | **DB réelle** |
+| `/wallet` | Vitrine carte digitale + **carte physique carbone** | vitrine |
 | `/login` · `/debug` | Auth · panneau de démo | — |
 
 ## Scripts

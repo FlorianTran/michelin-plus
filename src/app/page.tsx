@@ -510,8 +510,8 @@ export default function Home() {
           <div className="lp-soon">
             <div className="lp-soon__tile mch-reveal">
               <img
-                src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=800&q=60&sat=-100"
-                alt=""
+                src="/cards/card-handover.png"
+                alt="Carte Michelin+ présentée au comptoir"
               />
               <Badge tone="prestige" dot style={{ alignSelf: 'flex-start' }}>
                 Bientôt
@@ -521,8 +521,8 @@ export default function Home() {
             </div>
             <div className="lp-soon__tile mch-reveal">
               <img
-                src="https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?auto=format&fit=crop&w=800&q=60&sat=-100"
-                alt=""
+                src="/cards/card-carbon-premium.png"
+                alt="Carte physique Michelin+ en carbone, liseré or"
               />
               <Badge tone="prestige" dot style={{ alignSelf: 'flex-start' }}>
                 Bientôt

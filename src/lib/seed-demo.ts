@@ -61,6 +61,7 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
       role: Role.member,
       memberId: 'M+ 0042 1180',
       sinceYear: '2024',
+      referralCode: 'LEA-2024',
     },
   });
   const thomas = await db.user.create({
@@ -71,16 +72,18 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
       role: Role.ambassador,
       memberId: 'M+ 0001 0007',
       sinceYear: '2023',
+      referralCode: 'VIDAL-26',
     },
   });
+  // Sofia & Marc were referred by Thomas (his 2 000 referral pts = 2 filleuls × 1 000).
   const sofia = await db.user.create({
-    data: { email: 'sofia@michelin.plus', passwordHash: hash, name: 'Sofia Bernardi', role: Role.member, sinceYear: '2025' },
+    data: { email: 'sofia@michelin.plus', passwordHash: hash, name: 'Sofia Bernardi', role: Role.member, sinceYear: '2025', referralCode: 'SOFIA-B7', referredById: thomas.id },
   });
   const marc = await db.user.create({
-    data: { email: 'marc@michelin.plus', passwordHash: hash, name: 'Marc Petit', role: Role.member, sinceYear: '2025' },
+    data: { email: 'marc@michelin.plus', passwordHash: hash, name: 'Marc Petit', role: Role.member, sinceYear: '2025', referralCode: 'MARC-P3', referredById: thomas.id },
   });
   const ines = await db.user.create({
-    data: { email: 'ines@michelin.plus', passwordHash: hash, name: 'Inès Caron', role: Role.member, sinceYear: '2025' },
+    data: { email: 'ines@michelin.plus', passwordHash: hash, name: 'Inès Caron', role: Role.member, sinceYear: '2025', referralCode: 'INES-C9' },
   });
 
   // Léa lifetime 12 480 → Titane (km 6 280 · purchases 6 200)
