@@ -1,0 +1,86 @@
+/* Michelin+ — Grip · global stylesheet
+   Token layers first, then Tailwind (utility glue only — the design lives in tokens). */
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/effects.css';
+@import './tokens/base.css';
+@import 'tailwindcss';
+
+/* ---- App-level helpers reused across screens ---- */
+.mch-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+.mch-container--wide {
+  max-width: var(--container-wide);
+}
+
+/* Section rhythm */
+.mch-section {
+  padding-block: clamp(48px, 7vw, 104px);
+}
+
+/* Eyebrow + lead helpers */
+.mch-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-overline);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.mch-lead {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+}
+.mch-title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+  color: var(--text-primary);
+}
+
+/* Scroll-reveal primitive (paired with IntersectionObserver) */
+.mch-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out);
+}
+.mch-reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mch-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Toast stack — fixed bottom-right, spring slide-in */
+.mch-toast-wrap {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mch-toast-slot {
+  animation: mchToastIn 0.5s var(--ease-spring);
+}
+@keyframes mchToastIn {
+  from { opacity: 0; transform: translateX(120%); }
+  to { opacity: 1; transform: none; }
+}
+@media (max-width: 600px) {
+  .mch-toast-wrap { left: 16px; right: 16px; bottom: 16px; }
+}

@@ -1,0 +1,26 @@
+<svg width="160" height="200" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bibendum (placeholder)">
+  
+  <defs>
+    <linearGradient id="bib" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"></stop>
+      <stop offset="1" stop-color="#D4E7FA"></stop>
+    </linearGradient>
+  </defs>
+  
+  <ellipse cx="34" cy="110" rx="20" ry="13" fill="url(#bib)" transform="rotate(-28 34 110)"></ellipse>
+  <ellipse cx="126" cy="110" rx="20" ry="13" fill="url(#bib)" transform="rotate(28 126 110)"></ellipse>
+  
+  <ellipse cx="80" cy="150" rx="46" ry="26" fill="url(#bib)"></ellipse>
+  <ellipse cx="80" cy="120" rx="44" ry="24" fill="url(#bib)"></ellipse>
+  <ellipse cx="80" cy="93" rx="40" ry="22" fill="url(#bib)"></ellipse>
+  <ellipse cx="80" cy="70" rx="34" ry="19" fill="url(#bib)"></ellipse>
+  
+  <circle cx="80" cy="40" r="28" fill="url(#bib)"></circle>
+  
+  <ellipse cx="71" cy="34" rx="5" ry="7" fill="#0A1A3F"></ellipse>
+  <ellipse cx="89" cy="34" rx="5" ry="7" fill="#0A1A3F"></ellipse>
+  
+  <path d="M40 70 Q80 84 120 70" stroke="#AEC5E5" stroke-width="2" fill="none" opacity="0.5"></path>
+  <path d="M38 96 Q80 112 122 96" stroke="#AEC5E5" stroke-width="2" fill="none" opacity="0.5"></path>
+  <path d="M36 124 Q80 142 124 124" stroke="#AEC5E5" stroke-width="2" fill="none" opacity="0.5"></path>
+</svg>

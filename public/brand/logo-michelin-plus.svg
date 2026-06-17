@@ -1,0 +1,7 @@
+<svg width="320" height="72" viewBox="0 0 320 72" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Michelin+">
+  <text x="0" y="52" font-family="Archivo, sans-serif" font-weight="900" font-size="48" letter-spacing="-1.5" fill="#FFFFFF">MICHELIN</text>
+  <g transform="translate(258, 12)">
+    <rect x="0" y="16" width="44" height="12" rx="3" fill="#FCE500"></rect>
+    <rect x="16" y="0" width="12" height="44" rx="3" fill="#FCE500"></rect>
+  </g>
+</svg>

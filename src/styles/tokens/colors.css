@@ -1,0 +1,120 @@
+/* ============================================================
+   Michelin+ — Grip · COLOR TOKENS
+   Dark Spatial Bento — un seul thème sombre premium (pas de mode clair).
+   Source: docs/DESIGN_DIRECTION.md (prévaut) + docs/DESIGN_TOKENS.md (charte).
+   ============================================================ */
+
+:root {
+  /* ---- Brand DNA (charte officielle Michelin) ---- */
+  --mch-blue: #27509B;          /* Bleu Michelin — référence de marque */
+  --mch-blue-deep: #00205B;     /* Bleu foncé — surfaces immersives */
+  --mch-midnight: #000C34;      /* Midnight Blue — fonds sombres */
+  --mch-yellow: #FCE500;        /* Jaune Michelin — énergie / CTA */
+  --mch-gold: #E8C24A;          /* Or premium — prestige, RARE */
+
+  /* ---- Blue scale (nuances charte) ---- */
+  --blue-900: #000C34;
+  --blue-800: #00205B;
+  --blue-700: #0A1A3F;          /* surface élevée bento */
+  --blue-600: #27509B;
+  --blue-500: #3A61A6;
+  --blue-400: #6182BB;
+  --blue-300: #87A4D0;
+  --blue-200: #AEC5E5;          /* texte secondaire */
+  --blue-100: #C1D6EF;
+  --blue-050: #D4E7FA;
+
+  /* ---- Yellow scale ---- */
+  --yellow-500: #FCE500;
+  --yellow-400: #FCE817;
+  --yellow-300: #FDED44;
+  --yellow-200: #FDF271;
+  --yellow-100: #FEF79E;
+  --yellow-050: #FEFCCB;
+
+  /* ---- Gold scale (prestige) ---- */
+  --gold-600: #C9A23A;
+  --gold-500: #E8C24A;
+  --gold-400: #F0D26E;
+  --gold-300: #F6E29A;
+
+  /* ---- Near-black canvas + elevated surfaces ---- */
+  --ink-1000: #050609;          /* deepest */
+  --ink-950: #08090F;           /* CANVAS — near-black */
+  --ink-900: #0B0D16;
+  --ink-850: #0E1120;
+  --ink-800: #11152A;
+
+  /* ---- Functional greys (charte) ---- */
+  --grey-900: #1A1A1A;
+  --grey-700: #333333;
+  --grey-600: #4D4D4D;
+  --grey-500: #53565A;          /* Gris Responsable */
+  --grey-400: #7F7F7F;
+  --grey-300: #999999;
+  --grey-200: #CCCCCC;
+  --grey-100: #E5E5E5;
+
+  /* ---- Semantic states (charte alertes) ---- */
+  --success: #2E7D32;
+  --success-soft: #92C18F;
+  --warning: #F9A825;
+  --warning-soft: #FCD286;
+  --danger: #B71C1C;
+  --danger-soft: #DD8880;
+
+  /* ============================================================
+     SEMANTIC ALIASES — use these in components
+     ============================================================ */
+
+  /* Backgrounds & surfaces — NEAR-BLACK & warm-neutral (blue lives in accent cards, not the canvas) */
+  --canvas: #0A0A0C;                    /* pale near-black, barely warm */
+  --surface-1: #111114;                 /* base panel — neutral graphite */
+  --surface-2: #17171C;                 /* raised bento tile */
+  --surface-3: #1E1E24;                 /* richest neutral surface */
+  --surface-blue: var(--blue-800);      /* signature blue — ACCENT surface only */
+  --surface-blue-deep: var(--blue-700);
+
+  /* Rich panel gradients (vary the look — avoid flat bordered boxes) */
+  --panel-rich: linear-gradient(155deg, #1A1A20 0%, #121216 60%, #0E0E12 100%); /* @kind other */
+  --panel-gold: linear-gradient(155deg, #1C180E 0%, #14120C 55%, #0E0D0A 100%); /* @kind other */
+  --panel-blue: linear-gradient(155deg, #14213F 0%, #0D1830 55%, #0A1020 100%); /* @kind other */
+
+  /* Glass 2.0 — verre dépoli (neutral, not blue) */
+  --glass-bg: rgba(26, 26, 32, 0.55);
+  --glass-bg-strong: rgba(18, 18, 23, 0.80);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-border-bright: rgba(232, 194, 74, 0.26);   /* gold-tinted highlight = richer */
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+
+  /* Borders & lines — neutral graphite, used sparingly */
+  --border: #24242C;
+  --border-soft: rgba(255, 255, 255, 0.05);
+  --border-bright: rgba(232, 194, 74, 0.22);          /* gold hairline */
+  --hairline-gold: rgba(232, 194, 74, 0.35);
+
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: #C7CAD2;            /* neutral light (less blue) */
+  --text-tertiary: #8A8C96;
+  --text-muted: #5A5C66;
+  --text-on-accent: #0A0A0C;            /* texte sur jaune/or */
+
+  /* Accents — 2 systèmes, plus chaleur dorée */
+  --accent-energy: var(--mch-yellow);   /* CTA, états actifs (Léa) */
+  --accent-energy-hover: #FFE920;
+  --accent-warm: #F4D11E;               /* goldish yellow — grands aplats / glows riches */
+  --btn-gold: #E8C24A;                  /* light goldish-yellow for buttons — AA with dark ink text */
+  --btn-gold-hover: #F0D26E;
+  --accent-prestige: var(--mch-gold);   /* prestige, rare (Thomas) */
+  --accent-prestige-hover: #F0D26E;
+  --gold-grad: linear-gradient(135deg, #F6E29A 0%, #E8C24A 45%, #C9A23A 100%); /* @kind other */  /* métal doré */
+
+  /* Glossy accent fills (CTA / points meter) — top sheen + colour gradient, like a glass pill */
+  --gloss-energy: radial-gradient(120% 150% at 50% -35%, rgba(255,255,255,0.5), transparent 55%), linear-gradient(180deg, #FFE92A 0%, #FCE500 48%, #EAC91C 100%); /* @kind other */
+  --gloss-prestige: radial-gradient(120% 150% at 50% -35%, rgba(255,255,255,0.45), transparent 55%), linear-gradient(180deg, #F6E29A 0%, #E8C24A 48%, #C9A23A 100%); /* @kind other */
+  --gloss-blue: linear-gradient(120deg, #2FA3E0 0%, #2C63CE 48%, #2A3E9E 100%); /* @kind other */
+
+  /* Focus ring (WCAG AA) */
+  --focus-ring: rgba(252, 229, 0, 0.55);
+}

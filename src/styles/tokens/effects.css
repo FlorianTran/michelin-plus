@@ -1,0 +1,70 @@
+/* ============================================================
+   Michelin+ — Grip · EFFECTS: shadows, glows, aurora, motion, tread motif
+   Dark Spatial Bento — glassmorphism 2.0, aurora glow bleu→or, kinetic motion.
+   ============================================================ */
+
+:root {
+  /* ---- Elevation shadows (deep, on near-black) ---- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 60px -16px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 40px 90px -24px rgba(0, 0, 0, 0.8);
+
+  /* Inner top highlight for glass tiles */
+  --shadow-glass: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+                  0 24px 60px -20px rgba(0, 0, 0, 0.7);
+
+  /* ---- Accent glows ---- */
+  --glow-energy: 0 0 0 1px rgba(252, 229, 0, 0.4), 0 8px 30px -6px rgba(252, 229, 0, 0.35);
+  --glow-energy-soft: 0 10px 40px -10px rgba(244, 209, 30, 0.30);
+  --glow-prestige: 0 0 0 1px rgba(232, 194, 74, 0.45), 0 10px 34px -6px rgba(232, 194, 74, 0.4);
+  --glow-prestige-soft: 0 12px 44px -10px rgba(232, 194, 74, 0.30);
+  --glow-gold-rim: 0 1px 0 rgba(246, 226, 154, 0.25) inset, 0 18px 50px -18px rgba(232, 194, 74, 0.35);
+  --glow-blue: 0 10px 50px -12px rgba(39, 80, 155, 0.5);
+
+  /* Glossy pill shadows (pair with --gloss-* fills) */
+  --gloss-shadow-energy: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -10px 16px -10px rgba(110,82,8,0.4), 0 0 0 1px rgba(252,229,0,0.32), 0 10px 28px -8px rgba(252,229,0,0.5);
+  --gloss-shadow-prestige: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -10px 16px -10px rgba(90,68,16,0.4), 0 0 0 1px rgba(232,194,74,0.38), 0 10px 28px -8px rgba(232,194,74,0.48);
+  --gloss-shadow-blue: 0 8px 26px -10px rgba(39,80,155,0.55);
+
+  /* ---- Aurora / mesh glow backgrounds — near-black led, GOLD warmth, faint blue ---- */
+  --aurora-gold: radial-gradient(50% 42% at 86% 0%, rgba(232, 194, 74, 0.16) 0%, transparent 55%); /* @kind other */
+  --aurora-warm: radial-gradient(46% 38% at 12% 4%, rgba(150, 110, 40, 0.10) 0%, transparent 58%); /* @kind other */
+  --aurora-yellow: radial-gradient(40% 36% at 72% 96%, rgba(244, 209, 30, 0.07) 0%, transparent 58%); /* @kind other */
+  --aurora-blue: radial-gradient(55% 45% at 50% 128%, rgba(39, 80, 155, 0.16) 0%, transparent 62%); /* @kind other */
+
+  /* Full aurora stack — apply to page background (mostly pale near-black) */
+  --bg-aurora: var(--aurora-gold), var(--aurora-warm), var(--aurora-yellow), var(--aurora-blue), var(--canvas);
+
+  /* Photo overlay — strong black gradient over B&W cycling imagery */
+  --photo-overlay: linear-gradient(180deg, rgba(8, 9, 15, 0.45) 0%, rgba(8, 9, 15, 0.72) 55%, rgba(8, 9, 15, 0.96) 100%); /* @kind other */
+  --photo-overlay-side: linear-gradient(90deg, rgba(8, 9, 15, 0.92) 0%, rgba(8, 9, 15, 0.6) 50%, rgba(8, 9, 15, 0.3) 100%); /* @kind other */
+
+  /* ---- Blur ---- */
+  --blur-glass: 18px;
+  --blur-strong: 28px;
+
+  /* ---- Motion (kinetic — Framer-Motion-like easing) ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */        /* smooth deceleration */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* @kind other */ /* slight overshoot */
+  --dur-fast: 140ms; /* @kind other */
+  --dur-base: 240ms; /* @kind other */
+  --dur-slow: 420ms; /* @kind other */
+  --dur-reveal: 700ms; /* @kind other */
+
+  /* ---- Tire-tread signature motif (rainures de sculpture de pneu) ---- */
+  /* Use as background-image on separators / gauge fills */
+  --tread-energy: repeating-linear-gradient(115deg,
+      rgba(252, 229, 0, 0.9) 0px, rgba(252, 229, 0, 0.9) 7px,
+      rgba(252, 229, 0, 0.35) 7px, rgba(252, 229, 0, 0.35) 13px); /* @kind other */
+  --tread-prestige: repeating-linear-gradient(115deg,
+      rgba(232, 194, 74, 0.9) 0px, rgba(232, 194, 74, 0.9) 7px,
+      rgba(232, 194, 74, 0.3) 7px, rgba(232, 194, 74, 0.3) 13px); /* @kind other */
+  --tread-line: repeating-linear-gradient(90deg,
+      rgba(174, 197, 229, 0.22) 0px, rgba(174, 197, 229, 0.22) 2px,
+      transparent 2px, transparent 9px); /* @kind other */
+
+  /* Subtle grain/noise overlay opacity */
+  --grain-opacity: 0.04; /* @kind other */
+}

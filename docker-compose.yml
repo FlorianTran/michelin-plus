@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: michelin-plus-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-michelin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-michelin}
+      POSTGRES_DB: ${POSTGRES_DB:-michelin_plus}
+    ports:
+      - "${DB_PORT:-55434}:5432"
+    volumes:
+      - michelin_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-michelin} -d ${POSTGRES_DB:-michelin_plus}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # One-shot: create the schema + (re)seed canonical demo data, then exit.
+  # Uses the builder stage (has the Prisma CLI + tsx + source). Runs before app.
+  migrate:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: michelin-plus-migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-michelin}:${POSTGRES_PASSWORD:-michelin}@db:5432/${POSTGRES_DB:-michelin_plus}?schema=public"
+    command: sh -c "npx prisma db push --skip-generate --accept-data-loss && npx tsx prisma/seed.ts"
+    restart: "no"
+
+  # The app — slim Next.js standalone image.
+  app:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: michelin-plus-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-michelin}:${POSTGRES_PASSWORD:-michelin}@db:5432/${POSTGRES_DB:-michelin_plus}?schema=public"
+      SESSION_SECRET: ${SESSION_SECRET:-change-me-in-prod-32-bytes-minimum-please-ok}
+      DEBUG_TOKEN: ${DEBUG_TOKEN:-grip}
+      NODE_ENV: production
+    ports:
+      - "${APP_PORT:-3000}:3000"
+
+volumes:
+  michelin_pgdata:
