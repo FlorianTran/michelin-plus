@@ -4,8 +4,9 @@ import type { HeaderLink, FooterColumn } from '@/components/grip';
 export const MARKETING_NAV: HeaderLink[] = [
   { label: 'Comment ça marche', href: '/#how' },
   { label: 'Paliers', href: '/tiers' },
-  { label: 'Passe Saison', href: '/passe-saison' },
+  { label: 'Saison', href: '/passe-saison' },
   { label: 'Ambassadeur', href: '/programme-ambassadeur' },
+  { label: 'Revendeurs', href: '/revendeurs' },
 ];
 
 export const APP_NAV: { label: string; href: string; key: string }[] = [
@@ -30,6 +31,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: 'Espace membre', href: '/dashboard' },
       { label: 'Ambassadeurs', href: '/programme-ambassadeur' },
       { label: 'Récompenses', href: '/rewards' },
+      { label: 'Revendeurs', href: '/revendeurs' },
     ],
   },
   {

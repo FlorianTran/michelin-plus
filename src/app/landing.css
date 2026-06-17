@@ -53,6 +53,7 @@
   position: absolute;
   inset: 0;
   z-index: -2;
+  background-color: #0e1014; /* fallback if the Unsplash image fails to load (offline) */
   background-size: cover;
   background-position: center;
   filter: grayscale(1) contrast(1.12) brightness(0.62);
@@ -178,50 +179,25 @@
   background: linear-gradient(var(--text-tertiary), transparent);
 }
 
-/* ---- VIDEO / DEMO ---- */
-.lp-video-wrap {
+/* ---- VIDEO / DEMO (full-bleed autoplay) ---- */
+.lp-video-bleed {
   position: relative;
-  border-radius: var(--radius-xl);
+  width: 100%;
+  margin-top: 4px;
+  aspect-ratio: 16 / 9;
+  max-height: 82vh;
   overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-xl);
-  aspect-ratio: 16/9;
-  background: #0a0a0c;
+  background: #08090c;
   isolation: isolate;
 }
-.lp-video-frame__bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0 16px;
-  background: linear-gradient(180deg, rgba(8, 9, 12, 0.8), transparent);
-  pointer-events: none;
-}
-.lp-video-frame__bar i {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-}
-.lp-video-stage {
+/* subtle top/bottom fade so the edge-to-edge clip blends into the dark page */
+.lp-video-bleed::after {
+  content: '';
   position: absolute;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  text-align: center;
-  cursor: pointer;
-  background:
-    radial-gradient(60% 70% at 50% 18%, rgba(232, 194, 74, 0.14), transparent 60%),
-    linear-gradient(180deg, #0e0f14 0%, #08090c 100%);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(8, 9, 12, 0.35) 0%, transparent 14%, transparent 82%, rgba(8, 9, 12, 0.55) 100%);
 }
 .lp-video-el {
   position: absolute;
@@ -232,28 +208,11 @@
   z-index: 0;
   background: #08090c;
 }
-.lp-video-stage__play,
-.lp-video-stage__cap {
-  position: relative;
-  z-index: 1;
-}
-.lp-video-stage__play {
-  width: 78px;
-  height: 78px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gloss-prestige);
-  box-shadow: var(--gloss-shadow-prestige);
-  color: #1a1405;
-}
-.lp-video-stage__cap {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
+@media (max-width: 600px) {
+  .lp-video-bleed {
+    aspect-ratio: 9 / 12;
+    max-height: 78vh;
+  }
 }
 
 /* ---- PROBLEM → SOLUTION ---- */
@@ -330,6 +289,23 @@
   color: var(--text-secondary);
   line-height: var(--lh-relaxed);
   font-size: 0.9375rem;
+}
+
+/* ---- ROPO CTA (online → store bridge) ---- */
+.lp-ropo {
+  margin-top: clamp(28px, 4vw, 44px);
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.lp-ropo span {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-secondary);
 }
 
 /* ---- TIERS SHOWCASE ---- */

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
+import { CookieBanner } from '@/components/site/CookieBanner';
 
 export const metadata: Metadata = {
   title: 'Michelin+ — Le club des cyclistes premium',
@@ -21,7 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <CookieBanner />
+      </body>
     </html>
   );
 }

@@ -107,6 +107,8 @@
 /* member card column */
 .b-card-inner { display: flex; flex-direction: column; justify-content: center; gap: 14px; height: 100%; }
 .wallet-row { display: flex; align-items: center; gap: 10px; }
+.dash-revendeur { font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; color: var(--mch-yellow); display: inline-block; margin-top: 2px; }
+.dash-revendeur:hover { text-decoration: underline; }
 
 @media (max-width: 1100px) {
   .b-points, .b-tier, .b-feed, .b-reward, .b-card, .b-clan { grid-column: span 12; }

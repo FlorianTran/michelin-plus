@@ -96,7 +96,10 @@ export default function ProgrammeAmbassadeurPage() {
         </div>
         <div className="pa-hero__overlay" />
         <div className="mch-container pa-hero__inner">
-          <span className="pa-chip">Programme Ambassadeur</span>
+          <div className="pa-hero__tags">
+            <span className="pa-chip">Programme Ambassadeur</span>
+            <Badge tone="neutral" dot>Démo · exemple illustratif</Badge>
+          </div>
           <h1>
             Deviens
             <br />
@@ -238,6 +241,46 @@ export default function ProgrammeAmbassadeurPage() {
               </span>
               <img src="/rewards/gourde-bardet.png" alt="Gourde Équipe Romain Bardet" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MICRO-AMBASSADEUR — two-level model */}
+      <section className="mch-section" style={{ background: 'radial-gradient(60% 60% at 50% 50%, rgba(232,194,74,.05), transparent 70%)' }}>
+        <div className="mch-container">
+          <div className="pa-sec-head mch-reveal">
+            <span className="pa-chip">Deux niveaux d’engagement</span>
+            <h2>
+              Pas besoin d’être pro pour <em>fédérer</em>.
+            </h2>
+            <p>
+              Le club s’anime à deux échelles. L’ambassadeur porte la marque à grande échelle ;
+              le micro-ambassadeur — chef de club — rassemble sa communauté locale et touche, lui aussi,
+              une commission sur les ventes qu’il génère.
+            </p>
+          </div>
+          <div className="pa-tiers2">
+            <Reveal className="pa-tier2">
+              <span className="pa-tier2__lvl">Niveau 01</span>
+              <h3>Ambassadeur</h3>
+              <span className="pa-tier2__pct">12%<small>reversés / vente</small></span>
+              <ul>
+                <li>Figure publique du club, audience large</li>
+                <li>Éditions numérotées à son nom</li>
+                <li>Clan officiel &amp; événements VIP</li>
+              </ul>
+            </Reveal>
+            <Reveal className="pa-tier2 pa-tier2--micro">
+              <span className="pa-tier2__lvl">Niveau 02 · accessible à tous</span>
+              <h3>Micro-ambassadeur</h3>
+              <span className="pa-tier2__pct">6%<small>+ bonus communauté</small></span>
+              <ul>
+                <li>Chef de club : tu animes ta communauté locale</li>
+                <li>Ton code recrute et trace tes ventes</li>
+                <li>Bonus de points quand ton clan progresse</li>
+              </ul>
+              <p className="pa-tier2__eg">Ex. <b>Sofia</b> anime son club à Lyon Sud — code <code>SOFIA-CLUB</code>.</p>
+            </Reveal>
           </div>
         </div>
       </section>

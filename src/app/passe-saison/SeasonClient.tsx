@@ -123,7 +123,7 @@ export function SeasonClient() {
                 </h1>
                 <div className="season__meta">
                   <div className="season__stat">
-                    <div className="l">Palier actuel</div>
+                    <div className="l">Étape actuelle</div>
                     <div className="v"><b>{data.progress.currentStage}</b> / {data.progress.totalStages}</div>
                   </div>
                   <div className="season__stat">
@@ -154,10 +154,10 @@ export function SeasonClient() {
                 <div className="grand">
                   {grandPrix.image ? <img src={grandPrix.image} alt="" /> : null}
                   <div className="grand__body">
-                    <span className="pill-tier"><span className="dot" />Palier {grandPrix.stage} · Grand Prix</span>
+                    <span className="pill-tier"><span className="dot" />Étape {grandPrix.stage} · Grand Prix</span>
                     <div className="grand__name">{grandPrix.title}</div>
                     <div className="grand__desc">
-                      Atteins le palier {grandPrix.stage} de la saison pour décrocher cette récompense d&rsquo;exception, réservée aux pilotes les plus assidus.
+                      Atteins l&rsquo;étape {grandPrix.stage} de la saison pour décrocher cette récompense d&rsquo;exception, réservée aux pilotes les plus assidus.
                     </div>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export function SeasonClient() {
 
             {/* LADDER */}
             <div className="pass__head">
-              <h2>Paliers &amp; récompenses</h2>
+              <h2>Étapes &amp; récompenses</h2>
               <Badge tone="prestige" dot>{data.rewards.filter((r) => r.claimed).length} / {data.rewards.length} réclamés</Badge>
             </div>
             <div className="ladder">

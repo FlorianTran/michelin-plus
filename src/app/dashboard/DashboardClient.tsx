@@ -225,6 +225,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
                 <Button variant="ghost" size="sm" disabled iconLeft={ic.card} style={{ opacity: 0.55 }}>Ajouter au wallet</Button>
                 <Badge tone="neutral">Bientôt</Badge>
               </div>
+              <a href="/revendeurs" className="dash-revendeur">Trouver un revendeur partenaire →</a>
             </div>
           </Card>
 
