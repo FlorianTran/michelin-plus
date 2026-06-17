@@ -55,7 +55,9 @@
 /* ---- HERO ---- */
 .pa-hero {
   position: relative;
-  min-height: 90vh;
+  /* pull up behind the 72px sticky glass header so the hero photo shows through it */
+  margin-top: -72px;
+  min-height: calc(90vh + 72px);
   display: flex;
   flex-direction: column;
   isolation: isolate;

@@ -46,7 +46,10 @@
 /* ---- HERO ---- */
 .lp-hero {
   position: relative;
-  min-height: 92vh;
+  /* pull up behind the 72px sticky glass header so the hero photo shows through it
+     (no solid black band above the hero) */
+  margin-top: -72px;
+  min-height: calc(92vh + 72px);
   display: flex;
   flex-direction: column;
   isolation: isolate;
