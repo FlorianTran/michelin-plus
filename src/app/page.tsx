@@ -162,14 +162,7 @@ export default function Home() {
               <i />
               <i />
             </div>
-            <div className="lp-video-stage">
-              <span className="lp-video-stage__play" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </span>
-              <span className="lp-video-stage__cap">Aperçu · le programme en 40 secondes</span>
-            </div>
+            <ExplainerVideo />
           </div>
         </div>
       </section>
@@ -584,6 +577,45 @@ export default function Home() {
       </section>
 
       <SiteFooter />
+    </div>
+  );
+}
+
+/** Landing explainer — the 42s walkthrough, poster + click-to-play (muted, looping). */
+function ExplainerVideo() {
+  const ref = React.useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = React.useState(false);
+
+  function play() {
+    const v = ref.current;
+    if (!v) return;
+    v.play();
+    setPlaying(true);
+  }
+
+  return (
+    <div className="lp-video-stage" onClick={!playing ? play : undefined} role={!playing ? 'button' : undefined} aria-label={!playing ? 'Lire la vidéo' : undefined}>
+      <video
+        ref={ref}
+        className="lp-video-el"
+        src="/video/explainer.mp4"
+        poster="/video/explainer-poster.jpg"
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        controls={playing}
+      />
+      {!playing && (
+        <>
+          <span className="lp-video-stage__play" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+          <span className="lp-video-stage__cap">Le programme en 40 secondes — clique pour lire</span>
+        </>
+      )}
     </div>
   );
 }

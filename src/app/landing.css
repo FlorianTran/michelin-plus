@@ -218,9 +218,24 @@
   justify-content: center;
   gap: 18px;
   text-align: center;
+  cursor: pointer;
   background:
     radial-gradient(60% 70% at 50% 18%, rgba(232, 194, 74, 0.14), transparent 60%),
     linear-gradient(180deg, #0e0f14 0%, #08090c 100%);
+}
+.lp-video-el {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  background: #08090c;
+}
+.lp-video-stage__play,
+.lp-video-stage__cap {
+  position: relative;
+  z-index: 1;
 }
 .lp-video-stage__play {
   width: 78px;
