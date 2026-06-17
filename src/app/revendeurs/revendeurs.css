@@ -1,5 +1,5 @@
 /* Revendeurs (ROPO store locator) — marketing page scoped to .rev */
-.rev { background: var(--canvas); min-height: 100vh; overflow-x: hidden; }
+.rev { background: var(--canvas); min-height: 100vh; overflow-x: clip; }
 .rev__main { padding-block: clamp(32px, 5vw, 64px); }
 
 .rev__head { max-width: 60ch; margin-bottom: 36px; display: flex; flex-direction: column; gap: 14px; }

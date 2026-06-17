@@ -3,7 +3,8 @@
    Reuses the shared token layer + chrome from shared components. */
 
 .pa {
-  overflow-x: hidden;
+  /* `clip` keeps the sticky header working (`hidden` would make this a scroll container). */
+  overflow-x: clip;
   background: var(--canvas);
 }
 
