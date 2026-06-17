@@ -6,6 +6,7 @@ import { SiteFooter } from '@/components/site/SiteFooter';
 import { Badge, Button } from '@/components/grip';
 import { TeamProgress } from './TeamProgress';
 import { Reveal } from './Reveal';
+import { RevealOnScroll } from '@/components/site/RevealOnScroll';
 import './programme.css';
 
 export const metadata: Metadata = {
@@ -84,6 +85,7 @@ const STEPS: Step[] = [
 export default function ProgrammeAmbassadeurPage() {
   return (
     <div className="pa">
+      <RevealOnScroll />
       <MarketingHeader active="/programme-ambassadeur" />
 
       {/* HERO */}
