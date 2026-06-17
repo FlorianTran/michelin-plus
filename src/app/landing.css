@@ -3,7 +3,9 @@
    shared token layer. Chrome (header/footer) comes from shared components. */
 
 .landing {
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) keeps the sticky header working — `overflow-x: hidden`
+     forces overflow-y to `auto`, turning this into a scroll container. */
+  overflow-x: clip;
   background: var(--canvas);
 }
 

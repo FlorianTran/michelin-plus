@@ -35,7 +35,7 @@ const SECTIONS = [
 
 export default function ConfidentialitePage() {
   return (
-    <div style={{ background: 'var(--canvas)', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: 'var(--canvas)', minHeight: '100vh', overflowX: 'clip' }}>
       <MarketingHeader />
       <main className="mch-container" style={{ maxWidth: 760, paddingBlock: 'clamp(40px, 6vw, 80px)' }}>
         <Badge tone="neutral" dot>Document de démonstration</Badge>
