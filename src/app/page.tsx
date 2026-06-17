@@ -14,10 +14,14 @@ interface HeroStat {
 }
 
 const HERO_STATS: HeroStat[] = [
-  { count: 442, label: 'récompenses au catalogue' },
+  { count: 442, label: 'références au catalogue' },
   { count: 3, label: 'paliers de statut' },
   { count: 500, suffix: ' éd.', label: 'séries numérotées' },
 ];
+
+// Unsplash B&W cycling landscape — the original design hero (whitelisted in next.config).
+const HERO_BG =
+  "url('https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=2000&q=70&sat=-100')";
 
 /** Kinetic count-up — easeOutCubic, respects prefers-reduced-motion. */
 function HeroStatValue({ count, suffix = '' }: { count: number; suffix?: string }) {
@@ -107,10 +111,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="lp-hero">
-        <div
-          className="lp-hero__bg"
-          style={{ backgroundImage: "url('/bardet/bardet-hero.png')" }}
-        />
+        <div className="lp-hero__bg" style={{ backgroundImage: HERO_BG }} />
         <div className="lp-hero__overlay" />
         <div className="lp-hero__aurora" />
         <div className="mch-container lp-hero__inner">
@@ -149,22 +150,15 @@ export default function Home() {
         <div className="lp-scroll-hint">Défile</div>
       </section>
 
-      {/* VIDEO / DEMO */}
-      <section className="mch-section" id="video" style={{ paddingTop: 'clamp(40px,6vw,80px)' }}>
+      {/* VIDEO / DEMO — full-bleed, autoplay (muted, looping) */}
+      <section className="mch-section lp-video-sec" id="video" style={{ paddingTop: 'clamp(40px,6vw,80px)' }}>
         <div className="mch-container">
           <div className="lp-sec-head mch-reveal" style={{ marginBottom: 28 }}>
             <span className="lp-chip">Le programme en 40 secondes</span>
             <h2 className="mch-title">D’un achat à une appartenance.</h2>
           </div>
-          <div className="lp-video-wrap mch-reveal">
-            <div className="lp-video-frame__bar">
-              <i />
-              <i />
-              <i />
-            </div>
-            <ExplainerVideo />
-          </div>
         </div>
+        <ExplainerVideo />
       </section>
 
       {/* PROBLEM → SOLUTION */}
@@ -283,6 +277,12 @@ export default function Home() {
               <h4>Roule &amp; gagne</h4>
               <p>Connecte Strava : tes kilomètres deviennent des points. Grimpe les paliers, débloque les drops.</p>
             </div>
+          </div>
+          <div className="lp-ropo mch-reveal">
+            <span>En ligne ou en magasin — le pont fonctionne dans les deux sens.</span>
+            <Link href="/revendeurs">
+              <Button variant="outline" size="md">Trouver un revendeur</Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -437,13 +437,13 @@ export default function Home() {
         <div className="mch-container">
           <div className="lp-passe mch-reveal">
             <div>
-              <span className="lp-chip lp-chip--gold">Passe Saison 01 · L’Ascension</span>
+              <span className="lp-chip lp-chip--gold">Saison 01 · L’Ascension</span>
               <h2 className="mch-title">
-                Une <em>saison</em>, 50 paliers, des récompenses à chaque pas.
+                Une <em>saison</em>, des étapes, des récompenses à chaque pas.
               </h2>
               <p>
-                Chaque palier débloque des goodies, des avantages et des éditions limitées. Le Passe
-                Carbone ouvre la voie aux pneus signés et aux places d’événements VIP.
+                Chaque étape franchie débloque avantages, éditions limitées et défis de saison. Le
+                palier Carbone ouvre la voie aux pneus signés et aux places d’événements VIP.
               </p>
               <Link href="/passe-saison">
                 <Button variant="prestige" size="lg">
@@ -581,20 +581,32 @@ export default function Home() {
   );
 }
 
-/** Landing explainer — the 42s walkthrough, poster + click-to-play (muted, looping). */
+/** Landing explainer — full-bleed, muted/looping autoplay. Starts when scrolled into
+ *  view (IntersectionObserver, perf-friendly), pauses when scrolled away. */
 function ExplainerVideo() {
   const ref = React.useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = React.useState(false);
 
-  function play() {
+  React.useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    v.play();
-    setPlaying(true);
-  }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        }
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <div className="lp-video-stage" onClick={!playing ? play : undefined} role={!playing ? 'button' : undefined} aria-label={!playing ? 'Lire la vidéo' : undefined}>
+    <div className="lp-video-bleed mch-reveal">
       <video
         ref={ref}
         className="lp-video-el"
@@ -604,18 +616,8 @@ function ExplainerVideo() {
         loop
         playsInline
         preload="metadata"
-        controls={playing}
+        aria-label="Le programme Michelin+ en 40 secondes"
       />
-      {!playing && (
-        <>
-          <span className="lp-video-stage__play" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </span>
-          <span className="lp-video-stage__cap">Le programme en 40 secondes — clique pour lire</span>
-        </>
-      )}
     </div>
   );
 }

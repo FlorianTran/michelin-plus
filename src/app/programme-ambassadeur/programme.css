@@ -92,6 +92,12 @@
   justify-content: center;
   padding-block: 124px 84px;
 }
+.pa-hero__tags {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .pa-hero h1 {
   font-family: var(--font-display);
   font-weight: 900;
@@ -465,6 +471,102 @@
   margin-top: 4px;
 }
 
+/* ---- MICRO-AMBASSADEUR (two-level model) ---- */
+.pa-tiers2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.pa-tier2 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(24px, 3vw, 34px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+}
+.pa-tier2--micro {
+  border-color: var(--hairline-gold);
+  box-shadow: var(--glow-gold-rim);
+  background: var(--panel-gold);
+}
+.pa-tier2__lvl {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+}
+.pa-tier2 h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.pa-tier2__pct {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2.4rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background: var(--gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.pa-tier2__pct small {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  -webkit-text-fill-color: var(--text-secondary);
+}
+.pa-tier2 ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+}
+.pa-tier2 li {
+  position: relative;
+  padding-left: 22px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+.pa-tier2 li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold-400);
+}
+.pa-tier2__eg {
+  margin-top: auto;
+  padding-top: 12px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+.pa-tier2__eg code {
+  font-family: var(--font-mono);
+  color: var(--gold-300);
+}
+
 /* ---- CLOSING CTA ---- */
 .pa-cta {
   text-align: center;
@@ -499,7 +601,8 @@
     grid-template-columns: 1fr;
   }
   .pa-values,
-  .pa-steps {
+  .pa-steps,
+  .pa-tiers2 {
     grid-template-columns: 1fr;
   }
 }

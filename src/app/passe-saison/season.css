@@ -1,4 +1,4 @@
-/* Passe Saison — battle-pass ladder (ported from ui_kits/passe-saison). Gold/prestige accent. */
+/* Saison — étapes & récompenses (prestige ladder). Gold/prestige accent. */
 .pass { min-height: 100vh; position: relative; }
 .pass__aurora {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;

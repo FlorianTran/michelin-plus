@@ -92,10 +92,23 @@
 /* clan */
 .clan-tile { display: flex; flex-direction: column; gap: 8px; }
 .clan-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.clan-join-link {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.75rem; color: var(--mch-yellow);
+  background: rgba(252, 229, 0, 0.1); border: 1px solid rgba(252, 229, 0, 0.32);
+  padding: 5px 11px; border-radius: var(--radius-pill); cursor: pointer; white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.clan-join-link:hover { background: rgba(252, 229, 0, 0.2); }
+.clan-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 10px 2px 6px; }
+.clan-empty p { font-family: var(--font-body); font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin: 0; }
+.clan-empty__hint { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-tertiary); }
+.clan-empty__hint b { color: var(--mch-yellow); }
 
 /* member card column */
 .b-card-inner { display: flex; flex-direction: column; justify-content: center; gap: 14px; height: 100%; }
 .wallet-row { display: flex; align-items: center; gap: 10px; }
+.dash-revendeur { font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; color: var(--mch-yellow); display: inline-block; margin-top: 2px; }
+.dash-revendeur:hover { text-decoration: underline; }
 
 @media (max-width: 1100px) {
   .b-points, .b-tier, .b-feed, .b-reward, .b-card, .b-clan { grid-column: span 12; }
