@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: michelin-plus-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: michelin
+      POSTGRES_PASSWORD: michelin
+      POSTGRES_DB: michelin_plus
+    ports:
+      - "55434:5432"
+    volumes:
+      - michelin_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U michelin -d michelin_plus"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Full stack (Next + Postgres). Run with: docker compose --profile app up
+  app:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: michelin-plus-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://michelin:michelin@db:5432/michelin_plus?schema=public"
+      SESSION_SECRET: "dev-michelin-plus-session-secret-change-me-please-32b"
+      DEBUG_TOKEN: "grip"
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+
+volumes:
+  michelin_pgdata:

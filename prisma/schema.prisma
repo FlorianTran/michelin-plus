@@ -1,0 +1,202 @@
+// Michelin+ — Grip · data model
+// Loyalty engine is real (points → tiers → rewards, clans, activation codes).
+// Inputs (Strava, purchases) are mocked behind a sync button + /debug panel.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  member
+  ambassador
+  admin
+}
+
+enum PointsType {
+  purchase
+  km
+  referral
+  bonus
+  season
+}
+
+enum ActivitySource {
+  strava_mock
+  purchase
+  tier
+}
+
+enum CardKind {
+  activation
+  ambassador
+}
+
+enum RewardKind {
+  edition // numbered limited edition (prestige)
+  goodie // standard catalogue item
+  experience // VIP / event
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(member)
+  avatarUrl    String?
+  memberId     String? // e.g. "M+ 0042 1180"
+  sinceYear    String? // e.g. "2024"
+  createdAt    DateTime @default(now())
+
+  pointsEntries   PointsEntry[]
+  activities      Activity[]
+  redemptions     Redemption[]
+  clanMemberships ClanMember[]
+  usedCodes       CardCode[]          @relation("CardUsedBy")
+  ownedClans      Clan[]              @relation("ClanAmbassador")
+  ambassador      AmbassadorProfile?
+  seasonProgress  SeasonProgress[]
+}
+
+model PointsEntry {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      PointsType
+  amount    Int
+  label     String
+  meta      Json?
+  createdAt DateTime   @default(now())
+
+  @@index([userId])
+}
+
+model Activity {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  distanceKm    Float          @default(0)
+  elevation     Int            @default(0)
+  date          DateTime       @default(now())
+  pointsAwarded Int            @default(0)
+  source        ActivitySource @default(strava_mock)
+  createdAt     DateTime       @default(now())
+
+  @@index([userId])
+}
+
+model CardCode {
+  id           String    @id @default(cuid())
+  code         String    @unique
+  kind         CardKind  @default(activation)
+  pointsValue  Int       @default(2000)
+  productLabel String
+  used         Boolean   @default(false)
+  usedByUserId String?
+  usedBy       User?     @relation("CardUsedBy", fields: [usedByUserId], references: [id])
+  usedAt       DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model Clan {
+  id               String       @id @default(cuid())
+  name             String
+  ambassadorUserId String?
+  ambassador       User?        @relation("ClanAmbassador", fields: [ambassadorUserId], references: [id])
+  members          ClanMember[]
+  createdAt        DateTime     @default(now())
+}
+
+model ClanMember {
+  id     String @id @default(cuid())
+  clanId String
+  clan   Clan   @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  km     Int    @default(0)
+
+  @@unique([clanId, userId])
+  @@index([clanId])
+}
+
+model Reward {
+  id            String       @id @default(cuid())
+  title         String
+  image         String?
+  tierRequired  String       @default("Aluminium") // Aluminium | Titane | Carbone
+  cost          Int          @default(0)
+  editionNumber Int?
+  editionTotal  Int?
+  kind          RewardKind   @default(goodie)
+  createdAt     DateTime     @default(now())
+  redemptions   Redemption[]
+}
+
+model Redemption {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rewardId  String
+  reward    Reward   @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, rewardId])
+}
+
+model AmbassadorProfile {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code          String  @unique
+  commissionPct Float   @default(12)
+  salesCount    Int     @default(0)
+  ytdAmount     Int     @default(0) // euros reversés year-to-date
+  audience      Int     @default(0)
+}
+
+model Season {
+  id        String           @id @default(cuid())
+  name      String
+  endsAt    DateTime
+  maxPoints Int              @default(25000)
+  rewards   SeasonReward[]
+  missions  SeasonMission[]
+  progress  SeasonProgress[]
+}
+
+model SeasonProgress {
+  id           String @id @default(cuid())
+  userId       String
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId     String
+  season       Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  seasonPoints Int    @default(0) // kept SEPARATE from lifetime points
+
+  @@unique([userId, seasonId])
+}
+
+model SeasonReward {
+  id        String  @id @default(cuid())
+  seasonId  String
+  season    Season  @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  stage     Int
+  title     String
+  image     String?
+  threshold Int
+  epic      Boolean @default(false)
+}
+
+model SeasonMission {
+  id       String @id @default(cuid())
+  seasonId String
+  season   Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  title    String
+  reward   String
+  points   Int    @default(0)
+}

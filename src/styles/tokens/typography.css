@@ -1,0 +1,74 @@
+/* ============================================================
+   Michelin+ — Grip · TYPOGRAPHY TOKENS
+   Titres: "Michelin Unit Titling" (propriétaire) → substitut display "Archivo".
+   Corps: "Noto Sans" (charte officielle), chargé via Google Fonts.
+   ⚠️ SUBSTITUTION: Michelin Unit Titling est propriétaire. On utilise Archivo
+   (géométrique, fort en capitales, weights expanded) comme display de remplacement.
+   Remplacer par le .woff2 officiel via @font-face si fourni.
+   ============================================================ */
+
+
+:root {
+  /* ---- Families ---- */
+  --font-display: 'Archivo', 'Michelin Unit Titling', system-ui, sans-serif;
+  --font-wordmark: 'Saira', 'Archivo', system-ui, sans-serif;  /* logotype Michelin+ — italic, distinct */
+  --font-body: 'Noto Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* ---- Display type scale (titles, kinetic counters) ---- */
+  --fs-display-2xl: clamp(3.25rem, 7vw, 6.5rem); /* @kind font */
+  --fs-display-xl: clamp(2.75rem, 5vw, 4.5rem); /* @kind font */
+  --fs-display-lg: clamp(2.25rem, 3.6vw, 3.25rem); /* @kind font */
+  --fs-h1: clamp(2rem, 3vw, 2.75rem); /* @kind font */
+  --fs-h2: clamp(1.625rem, 2.2vw, 2.125rem); /* @kind font */
+  --fs-h3: 1.5rem; /* @kind font */
+  --fs-h4: 1.25rem; /* @kind font */
+
+  /* ---- Body scale ---- */
+  --fs-body-lg: 1.125rem; /* @kind font */
+  --fs-body: 1rem; /* @kind font */
+  --fs-body-sm: 0.875rem; /* @kind font */
+  --fs-caption: 0.8125rem; /* @kind font */
+  --fs-overline: 0.6875rem; /* @kind font */
+
+  /* ---- Weights ---- */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+  --fw-black: 900; /* @kind font */
+
+  /* ---- Line heights ---- */
+  --lh-tight: 1.02; /* @kind font */
+  --lh-snug: 1.18; /* @kind font */
+  --lh-base: 1.5; /* @kind font */
+  --lh-relaxed: 1.65; /* @kind font */
+
+  /* ---- Tracking ---- */
+  --tracking-display: -0.022em; /* @kind font */
+  --tracking-tight: -0.01em; /* @kind font */
+  --tracking-normal: 0; /* @kind font */
+  --tracking-wide: 0.04em; /* @kind font */
+  --tracking-overline: 0.16em; /* @kind font */
+}
+
+/* ---- Helper classes (optional, components can use tokens directly) ---- */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.t-overline {
+  font-family: var(--font-body);
+  font-size: var(--fs-overline);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+}
+.t-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
