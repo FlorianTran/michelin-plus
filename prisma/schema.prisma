@@ -43,6 +43,13 @@ enum RewardKind {
   experience // VIP / event
 }
 
+// Two-tier ambassador model: a head ambassador (figure publique, % plein) vs a
+// micro-ambassador (chef de club — communauté locale, commission moindre/bonus).
+enum AmbassadorKind {
+  ambassador
+  micro
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -155,14 +162,15 @@ model Redemption {
 }
 
 model AmbassadorProfile {
-  id            String  @id @default(cuid())
-  userId        String  @unique
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  code          String  @unique
-  commissionPct Float   @default(12)
-  salesCount    Int     @default(0)
-  ytdAmount     Int     @default(0) // euros reversés year-to-date
-  audience      Int     @default(0)
+  id            String         @id @default(cuid())
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code          String         @unique
+  kind          AmbassadorKind @default(ambassador)
+  commissionPct Float          @default(12)
+  salesCount    Int            @default(0)
+  ytdAmount     Int            @default(0) // euros reversés year-to-date
+  audience      Int            @default(0)
 }
 
 model Season {

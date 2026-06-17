@@ -36,6 +36,8 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
   const [busy, setBusy] = React.useState(false);
   const [activateOpen, setActivateOpen] = React.useState(false);
   const [codeInput, setCodeInput] = React.useState('');
+  const [clanOpen, setClanOpen] = React.useState(false);
+  const [clanCode, setClanCode] = React.useState('');
   const [unlock, setUnlock] = React.useState<{ title: string; image: string | null; edition: string | null } | null>(null);
   const { toasts, push, dismiss } = useToasts();
 
@@ -85,6 +87,22 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
       });
     } catch (e) {
       push({ tone: 'info', title: 'Activation refusée', message: e instanceof Error ? e.message : '' });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function joinClan() {
+    if (!clanCode.trim()) return;
+    setBusy(true);
+    try {
+      const res = await apiPost<{ clan: { name: string; size: number } }>('/api/clan/join', { code: clanCode });
+      setClanOpen(false);
+      setClanCode('');
+      await refresh();
+      push({ tone: 'energy', title: `Bienvenue dans ${res.clan.name}`, message: `Tu es le ${res.clan.size}ᵉ membre du clan.` });
+    } catch (e) {
+      push({ tone: 'info', title: 'Clan introuvable', message: e instanceof Error ? e.message : '' });
     } finally {
       setBusy(false);
     }
@@ -212,18 +230,49 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
 
           {/* CLAN LEADERBOARD */}
           <Card variant="glass" padding="lg" className="clan-tile b-clan">
-            <div className="clan-head"><h3>Classement · {clan?.name ?? 'Clan'}</h3>{clan ? <Badge tone="blue">{board.length} membres</Badge> : null}</div>
-            <div>
-              {board.map((m) => (
-                <LeaderboardRow key={m.rank} rank={m.rank} name={m.name} meta={m.meta} value={m.km.toLocaleString('fr-FR')} unit="km" you={m.you} avatar={m.avatar} />
-              ))}
+            <div className="clan-head">
+              <h3>Classement · {clan?.name ?? 'Clan'}</h3>
+              {clan ? (
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <Badge tone="blue">{board.length} membres</Badge>
+                  <button type="button" className="clan-join-link" onClick={() => setClanOpen(true)}>+ Code</button>
+                </div>
+              ) : null}
             </div>
+            {clan ? (
+              <div>
+                {board.map((m) => (
+                  <LeaderboardRow key={m.rank} rank={m.rank} name={m.name} meta={m.meta} value={m.km.toLocaleString('fr-FR')} unit="km" you={m.you} avatar={m.avatar} />
+                ))}
+              </div>
+            ) : (
+              <div className="clan-empty">
+                <p>Tu n’as pas encore de clan. Saisis le code de ton ambassadeur pour rejoindre sa communauté et grimper le classement ensemble.</p>
+                <Button variant="energy" size="sm" onClick={() => setClanOpen(true)}>Rejoindre un clan</Button>
+                <span className="clan-empty__hint">Code démo : <b>VIDAL-LYON</b></span>
+              </div>
+            )}
           </Card>
         </div>
       </main>
 
       {activateOpen && (
         <ActivateModal value={codeInput} onChange={setCodeInput} onConfirm={activate} onClose={() => setActivateOpen(false)} busy={busy} />
+      )}
+
+      {clanOpen && (
+        <CodeModal
+          eyebrow="Rejoindre un clan"
+          title="Code de ton ambassadeur"
+          help="Ton ambassadeur t’a partagé un code de clan. Saisis-le pour rejoindre sa communauté."
+          placeholder="VIDAL-LYON"
+          hint="Code démo : VIDAL-LYON"
+          value={clanCode}
+          onChange={setClanCode}
+          onConfirm={joinClan}
+          onClose={() => setClanOpen(false)}
+          busy={busy}
+        />
       )}
 
       {unlock && (
@@ -263,6 +312,34 @@ function ActivateModal({ value, onChange, onConfirm, onClose, busy }: { value: s
             <Button variant="ghost" full onClick={onClose}>Annuler</Button>
           </div>
           <p style={{ color: 'var(--text-tertiary)', fontSize: '.75rem', margin: 0 }}>Codes démo : GRIP-2000 · MICH-CLASSIC · CARBON-CDM</p>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function CodeModal({ eyebrow, title, help, placeholder, hint, value, onChange, onConfirm, onClose, busy }: {
+  eyebrow: string; title: string; help: string; placeholder: string; hint: string;
+  value: string; onChange: (v: string) => void; onConfirm: () => void; onClose: () => void; busy: boolean;
+}) {
+  return (
+    <div role="dialog" aria-modal="true" style={{ position: 'fixed', inset: 0, zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(5,6,9,.78)', backdropFilter: 'blur(8px)' }}>
+      <Card variant="hero" padding="lg" style={{ width: 'min(420px, 100%)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <span className="mch-eyebrow" style={{ color: 'var(--mch-yellow)' }}>{eyebrow}</span>
+          <h3 className="mch-title" style={{ fontSize: '1.5rem' }}>{title}</h3>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '.875rem', margin: 0 }}>{help}</p>
+          <input
+            autoFocus value={value} onChange={(e) => onChange(e.target.value.toUpperCase())}
+            onKeyDown={(e) => { if (e.key === 'Enter') onConfirm(); }}
+            placeholder={placeholder}
+            style={{ height: 'var(--control-h)', padding: '0 14px', borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,.04)', border: '1px solid var(--border)', color: '#fff', fontFamily: 'var(--font-mono)', fontSize: '1rem', letterSpacing: '.06em', outline: 'none', textTransform: 'uppercase' }}
+          />
+          <div style={{ display: 'flex', gap: 10 }}>
+            <Button variant="energy" full disabled={busy} onClick={onConfirm}>Rejoindre</Button>
+            <Button variant="ghost" full onClick={onClose}>Annuler</Button>
+          </div>
+          <p style={{ color: 'var(--text-tertiary)', fontSize: '.75rem', margin: 0 }}>{hint}</p>
         </div>
       </Card>
     </div>

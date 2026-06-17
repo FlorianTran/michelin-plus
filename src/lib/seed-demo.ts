@@ -1,6 +1,7 @@
 // Michelin+ — Grip · canonical demo seed (shared by prisma/seed.ts + /api/debug/reset).
-// Léa (member, Titane), Thomas (ambassador, Carbone), clan "Gravel Lyon" (5),
-// rewards catalogue (numbered editions + gourde Bardet), activation codes, season.
+// Léa (member, Titane, NO clan → joins live via code), Thomas (ambassador, Carbone,
+// owns clan "Gravel Lyon"), Sofia (micro-ambassadrice), rewards catalogue (numbered
+// editions + gourde Bardet), activation codes, season.
 import {
   PrismaClient,
   Role,
@@ -115,7 +116,11 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
     ],
   });
   await db.ambassadorProfile.create({
-    data: { userId: thomas.id, code: 'VIDAL-LYON', commissionPct: 12, salesCount: 87, ytdAmount: 2480, audience: 14200 },
+    data: { userId: thomas.id, code: 'VIDAL-LYON', kind: 'ambassador', commissionPct: 12, salesCount: 87, ytdAmount: 2480, audience: 14200 },
+  });
+  // Sofia = micro-ambassadrice (chef de club) : commission moindre, communauté locale.
+  await db.ambassadorProfile.create({
+    data: { userId: sofia.id, code: 'SOFIA-CLUB', kind: 'micro', commissionPct: 6, salesCount: 12, ytdAmount: 240, audience: 860 },
   });
 
   await db.pointsEntry.createMany({
@@ -126,12 +131,13 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
     ],
   });
 
+  // Léa starts WITHOUT a clan on purpose → the demo shows her joining "Gravel Lyon"
+  // live via Thomas's code VIDAL-LYON (real ClanMember write, leaderboard updates).
   const clan = await db.clan.create({ data: { name: 'Gravel Lyon', ambassadorUserId: thomas.id } });
   await db.clanMember.createMany({
     data: [
       { clanId: clan.id, userId: thomas.id, km: 1842 },
       { clanId: clan.id, userId: sofia.id, km: 1610 },
-      { clanId: clan.id, userId: lea.id, km: 1488 },
       { clanId: clan.id, userId: marc.id, km: 1320 },
       { clanId: clan.id, userId: ines.id, km: 1204 },
     ],
@@ -139,7 +145,7 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
 
   await db.reward.createMany({
     data: [
-      { title: 'Power CDM — Série numérotée', image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=70&sat=-100', tierRequired: 'Carbone', cost: 9000, editionNumber: 42, editionTotal: 500, kind: RewardKind.edition },
+      { title: 'Power CDM — Série numérotée', image: '/tiers/tires-flockes.png', tierRequired: 'Carbone', cost: 9000, editionNumber: 42, editionTotal: 500, kind: RewardKind.edition },
       { title: 'Pneus flockés — Édition Léa', image: '/tiers/tires-flockes.png', tierRequired: 'Carbone', cost: 12000, editionNumber: 7, editionTotal: 100, kind: RewardKind.edition },
       { title: 'Gourde Équipe Romain Bardet', image: '/rewards/gourde-bardet.png', tierRequired: 'Titane', cost: 1500, kind: RewardKind.goodie },
       { title: 'Pack stickers Michelin+', image: '/rewards/stickers.png', tierRequired: 'Aluminium', cost: 400, kind: RewardKind.goodie },
@@ -166,9 +172,9 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
       maxPoints: 25000,
       rewards: {
         create: [
-          { stage: 14, title: 'T-shirt édition saison', threshold: 7000, image: '/rewards/stickers.png', epic: false },
+          { stage: 14, title: 'T-shirt édition saison', threshold: 7000, image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=900&q=70&sat=-100', epic: false },
           { stage: 20, title: 'Power Cup Carbone #042', threshold: 10000, image: '/tiers/tires-flockes.png', epic: true },
-          { stage: 50, title: 'Pneus signés + Weekend VIP', threshold: 25000, image: '/bardet/bardet-road.jpg', epic: true },
+          { stage: 50, title: 'Pneus signés + Weekend VIP', threshold: 25000, image: '/tiers/tires-flockes.png', epic: true },
         ],
       },
       missions: {

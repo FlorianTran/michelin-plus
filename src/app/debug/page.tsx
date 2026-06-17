@@ -11,9 +11,24 @@ interface MeResp { user: { name: string; email: string; role: string } | null }
 interface RewardRow { id: string; title: string; tierRequired: string; edition: string | null }
 interface RewardsResp { total: number; currentTier: string; rewards: RewardRow[] }
 
+interface DebugState {
+  db: { connected: boolean; latencyMs: number | null; provider: string };
+  counts: Record<string, number | string>;
+  session: { name: string; role: string; sumPoints: number; tier: string } | null;
+  writes: {
+    PointsEntry: { id: string; at: string; who: string; type: string; amount: number; label: string }[];
+    Activity: { id: string; at: string; who: string; name: string; km: number; points: number; source: string }[];
+    Redemption: { id: string; at: string; who: string; reward: string }[];
+  };
+}
+
+const fmtTime = (iso: string) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
 export default function DebugPage() {
   const { toasts, push, dismiss } = useToasts();
   const [token, setToken] = React.useState('grip');
+  const [unlocked, setUnlocked] = React.useState(false);
+  const [checking, setChecking] = React.useState(false);
   const [me, setMe] = React.useState<MeResp['user']>(null);
   const [rewards, setRewards] = React.useState<RewardRow[]>([]);
   const [total, setTotal] = React.useState<number | null>(null);
@@ -23,6 +38,7 @@ export default function DebugPage() {
   const [code, setCode] = React.useState(CODES[0]);
   const [rewardId, setRewardId] = React.useState('');
   const [log, setLog] = React.useState<string[]>([]);
+  const [dbState, setDbState] = React.useState<DebugState | null>(null);
 
   const refresh = React.useCallback(async () => {
     try {
@@ -38,7 +54,34 @@ export default function DebugPage() {
     }
   }, [rewardId]);
 
-  React.useEffect(() => { refresh(); }, [refresh]);
+  const loadState = React.useCallback(async () => {
+    try {
+      const s = await apiGet<DebugState>(`/api/debug/state?token=${encodeURIComponent(token)}`);
+      setDbState(s);
+      return true;
+    } catch {
+      return false;
+    }
+  }, [token]);
+
+  async function unlock() {
+    setChecking(true);
+    const okState = await loadState();
+    setChecking(false);
+    if (okState) {
+      setUnlocked(true);
+      await refresh();
+    } else {
+      push({ tone: 'info', title: 'Token invalide', message: 'Vérifie DEBUG_TOKEN.' });
+    }
+  }
+
+  // Live auto-refresh of the DB-proof panel while unlocked.
+  React.useEffect(() => {
+    if (!unlocked) return;
+    const id = window.setInterval(loadState, 4000);
+    return () => window.clearInterval(id);
+  }, [unlocked, loadState]);
 
   function addLog(line: string) {
     setLog((prev) => [`${new Date().toLocaleTimeString('fr-FR')} · ${line}`, ...prev].slice(0, 12));
@@ -60,11 +103,35 @@ export default function DebugPage() {
       });
       addLog(`${action} → ${JSON.stringify(res)}`);
       await refresh();
+      await loadState();
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Erreur';
       push({ tone: 'info', title: 'Erreur', message: msg });
       addLog(`${action} ✗ ${msg}`);
     }
+  }
+
+  if (!unlocked) {
+    return (
+      <main className="mch-container" style={{ minHeight: 'calc(100vh - 0px)', display: 'grid', placeItems: 'center', paddingBlock: 40 }}>
+        <Card variant="hero" padding="lg" style={{ width: 'min(420px, 100%)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <span className="mch-eyebrow" style={{ color: 'var(--mch-yellow)' }}>Panneau de démonstration</span>
+            <h1 className="mch-title" style={{ fontSize: '1.75rem' }}>Debug · accès protégé</h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '.9rem', margin: 0 }}>
+              Cet espace pilote la démo et expose la preuve technique (écritures DB). Saisis le token.
+            </p>
+            <input
+              autoFocus value={token} onChange={(e) => setToken(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') unlock(); }}
+              placeholder="DEBUG_TOKEN" style={input}
+            />
+            <Button variant="energy" full disabled={checking} onClick={unlock}>{checking ? '…' : 'Déverrouiller'}</Button>
+          </div>
+        </Card>
+        <ToastStack toasts={toasts} onDismiss={dismiss} />
+      </main>
+    );
   }
 
   return (
@@ -96,8 +163,8 @@ export default function DebugPage() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
-          <Button variant="blue" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'lea@michelin.plus', password: 'demo1234' }); await refresh(); push({ title: 'Connecté · Léa', tone: 'energy' }); }}>Login Léa</Button>
-          <Button variant="prestige" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'thomas@michelin.plus', password: 'demo1234' }); await refresh(); push({ title: 'Connecté · Thomas', tone: 'prestige' }); }}>Login Thomas</Button>
+          <Button variant="blue" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'lea@michelin.plus', password: 'demo1234' }); await refresh(); await loadState(); push({ title: 'Connecté · Léa', tone: 'energy' }); }}>Login Léa</Button>
+          <Button variant="prestige" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'thomas@michelin.plus', password: 'demo1234' }); await refresh(); await loadState(); push({ title: 'Connecté · Thomas', tone: 'prestige' }); }}>Login Thomas</Button>
         </div>
       </Card>
 
@@ -140,6 +207,8 @@ export default function DebugPage() {
         </Panel>
       </div>
 
+      <DbProofPanel state={dbState} />
+
       <Card variant="solid" padding="md" style={{ marginTop: 18 }}>
         <span className="mch-eyebrow">Journal</span>
         <pre style={{ margin: '10px 0 0', fontFamily: 'var(--font-mono)', fontSize: '.75rem', color: 'var(--text-tertiary)', whiteSpace: 'pre-wrap', maxHeight: 200, overflow: 'auto' }}>
@@ -149,6 +218,76 @@ export default function DebugPage() {
 
       <ToastStack toasts={toasts} onDismiss={dismiss} />
     </main>
+  );
+}
+
+/** Live proof that the backend writes & processes real rows in Postgres. */
+function DbProofPanel({ state }: { state: DebugState | null }) {
+  return (
+    <Card variant="glass" padding="lg" style={{ marginTop: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
+        <div>
+          <span className="mch-eyebrow" style={{ color: 'var(--mch-yellow)' }}>Base de données — preuve technique</span>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '.85rem', margin: '4px 0 0' }}>
+            Données réelles écrites &amp; traitées dans PostgreSQL. Rafraîchi en direct toutes les 4 s.
+          </p>
+        </div>
+        {state ? (
+          <Badge tone={state.db.connected ? 'success' : 'neutral'} dot>
+            {state.db.connected ? `Postgres connecté · ${state.db.latencyMs ?? '—'} ms` : 'Hors ligne'}
+          </Badge>
+        ) : <Badge tone="neutral">Chargement…</Badge>}
+      </div>
+
+      {state ? (
+        <>
+          {/* COUNTS */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 10, marginBottom: 18 }}>
+            {Object.entries(state.counts).map(([table, n]) => (
+              <div key={table} style={{ padding: '12px 14px', borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,.04)', border: '1px solid var(--border)' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.35rem', color: '#fff', lineHeight: 1 }}>{n}</div>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: '.68rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginTop: 6 }}>{table}</div>
+              </div>
+            ))}
+          </div>
+
+          {state.session ? (
+            <div style={{ marginBottom: 16, fontFamily: 'var(--font-mono)', fontSize: '.8rem', color: 'var(--text-secondary)' }}>
+              SUM(points) live · <b style={{ color: 'var(--mch-yellow)' }}>{state.session.name}</b> = {' '}
+              <b style={{ color: '#fff' }}>{state.session.sumPoints?.toLocaleString('fr-FR')} pts</b> → palier {state.session.tier}
+            </div>
+          ) : null}
+
+          {/* LIVE WRITES FEED */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
+            <WriteFeed title="PointsEntry — dernières écritures" rows={state.writes.PointsEntry.map((p) => ({ id: p.id, at: p.at, main: `${p.amount >= 0 ? '+' : ''}${p.amount} · ${p.label}`, sub: `${p.who} · ${p.type}` }))} />
+            <WriteFeed title="Activity — dernières sorties" rows={state.writes.Activity.map((a) => ({ id: a.id, at: a.at, main: `${a.name}`, sub: `${a.who} · ${a.km} km · +${a.points} pts` }))} />
+            <WriteFeed title="Redemption — récompenses" rows={state.writes.Redemption.map((r) => ({ id: r.id, at: r.at, main: r.reward, sub: r.who }))} emptyLabel="Aucune récompense débloquée pour l’instant." />
+          </div>
+        </>
+      ) : (
+        <p style={{ color: 'var(--text-tertiary)', fontSize: '.85rem' }}>Connexion à la base…</p>
+      )}
+    </Card>
+  );
+}
+
+function WriteFeed({ title, rows, emptyLabel }: { title: string; rows: { id: string; at: string; main: string; sub: string }[]; emptyLabel?: string }) {
+  return (
+    <div style={{ borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,.025)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+      <div style={{ padding: '10px 12px', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '.66rem', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--text-tertiary)', borderBottom: '1px solid var(--border-soft)' }}>{title}</div>
+      <div style={{ maxHeight: 200, overflow: 'auto' }}>
+        {rows.length ? rows.map((r) => (
+          <div key={r.id} style={{ padding: '9px 12px', borderBottom: '1px solid var(--border-soft)', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '.82rem', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.main}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '.68rem', color: 'var(--mch-yellow)', flex: 'none' }}>{fmtTime(r.at)}</span>
+            </div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '.68rem', color: 'var(--text-tertiary)' }}>{r.sub}</span>
+          </div>
+        )) : <div style={{ padding: '14px 12px', fontFamily: 'var(--font-body)', fontSize: '.78rem', color: 'var(--text-tertiary)' }}>{emptyLabel ?? 'Aucune donnée.'}</div>}
+      </div>
+    </div>
   );
 }
 
