@@ -119,7 +119,7 @@ export function SeasonClient() {
               <div className="season__info">
                 <Badge tone="prestige" dot>Passe Saison</Badge>
                 <h1 className="season__title">
-                  L&rsquo;<em>{data.season.name}</em>
+                  <em>{data.season.name}</em>
                 </h1>
                 <div className="season__meta">
                   <div className="season__stat">
