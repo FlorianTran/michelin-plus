@@ -12,7 +12,7 @@ export const APP_NAV: { label: string; href: string; key: string }[] = [
   { label: 'Tableau de bord', href: '/dashboard', key: 'dashboard' },
   { label: 'Récompenses', href: '/rewards', key: 'rewards' },
   { label: 'Paliers', href: '/tiers', key: 'tiers' },
-  { label: 'Passe Saison', href: '/passe-saison', key: 'passe-saison' },
+  { label: 'Parrainage', href: '/parrainage', key: 'parrainage' },
 ];
 
 export const FOOTER_COLUMNS: FooterColumn[] = [

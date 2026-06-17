@@ -15,6 +15,15 @@ export default function LoginPage() {
   const [name, setName] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
+  const [ref, setRef] = React.useState<string | null>(null);
+
+  // Read ?ref= / ?mode=signup from the invite link (client-only — avoids Suspense).
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const r = params.get('ref');
+    if (r) setRef(r.toUpperCase());
+    if (params.get('mode') === 'signup' || r) setMode('signup');
+  }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,7 +31,7 @@ export default function LoginPage() {
     setBusy(true);
     try {
       if (mode === 'signup') {
-        await apiPost('/api/auth/signup', { email, password, name });
+        await apiPost('/api/auth/signup', { email, password, name, ref });
       } else {
         await apiPost('/api/auth/login', { email, password });
       }
@@ -58,6 +67,15 @@ export default function LoginPage() {
               {mode === 'login' ? 'Connecte-toi à ton espace Michelin+.' : 'Crée ton compte et commence à grimper les paliers.'}
             </p>
           </div>
+
+          {ref && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 'var(--radius-md)', background: 'rgba(232,194,74,.1)', border: '1px solid var(--hairline-gold)' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold-400)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: 'none' }}><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z" /><path d="M13 5v2M13 11v2M13 17v2" /></svg>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '.875rem', color: 'var(--text-secondary)' }}>
+                Invitation acceptée — code <b style={{ color: 'var(--gold-400)', fontFamily: 'var(--font-mono)' }}>{ref}</b>. Crée ton compte pour rejoindre le club.
+              </span>
+            </div>
+          )}
 
           <Card variant="glass" padding="lg">
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
