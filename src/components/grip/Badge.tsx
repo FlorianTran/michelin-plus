@@ -16,7 +16,10 @@ export function Badge({ children, tone = 'neutral', dot = false, size = 'md', st
   mchStyle('mch-badge', `
     .mch-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-body);
       font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:var(--radius-pill);
-      white-space:nowrap;line-height:1;}
+      white-space:nowrap;line-height:1;
+      /* never stretch to fill a flex/grid parent — a tag hugs its text
+         (fit-content disables cross-axis stretch without changing alignment) */
+      width:fit-content;max-width:100%;}
     .mch-badge--md{font-size:.6875rem;padding:5px 11px;}
     .mch-badge--sm{font-size:.625rem;padding:3px 9px;}
     .mch-badge__dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
