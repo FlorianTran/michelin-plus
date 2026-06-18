@@ -2,9 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [main, 'feat/**']
+    branches: [main]
   pull_request:
     branches: [main]
+
+# One run per PR (or per ref on main); a new push cancels the superseded run.
+# Triggering only on PRs + main pushes avoids the duplicate push/PR run for the
+# same commit on feature branches.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:

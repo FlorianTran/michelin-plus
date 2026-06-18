@@ -1,0 +1,44 @@
+name: Deploy
+
+# Auto-deploy to the demo VPS once CI passes on main.
+# Fires only after the "CI" workflow completes successfully on the main branch,
+# so a red build never reaches the box.
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
+  # Manual escape hatch (Actions → Deploy → Run workflow).
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    # workflow_run: only on green CI. workflow_dispatch: always.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.MICHELIN_SSH_HOST }}
+          username: ${{ secrets.MICHELIN_SSH_USER }}
+          key: ${{ secrets.MICHELIN_SSH_KEY }}
+          port: ${{ secrets.MICHELIN_SSH_PORT || 22 }}
+          script_stop: true
+          script: |
+            cd /opt/michelin-plus 2>/dev/null || cd ~/michelin-plus
+            echo "Deploying $(pwd) on $(hostname)"
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
+            git rev-parse --short HEAD
+            docker compose --profile app up -d --build
+            docker image prune -f
+            docker compose --profile app ps
