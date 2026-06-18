@@ -50,7 +50,7 @@ export function Header({
 
   mchStyle('mch-header', `
     .mch-header{position:sticky;top:0;z-index:var(--z-header);display:flex;align-items:center;gap:24px;
-      height:72px;padding:0 clamp(16px,4vw,40px);background:rgba(8,9,15,.72);
+      height:72px;padding:0 clamp(16px,4vw,40px);background:rgba(8,9,15,.45);
       backdrop-filter:blur(var(--blur-glass));-webkit-backdrop-filter:blur(var(--blur-glass));
       border-bottom:1px solid var(--border);}
     .mch-header__logo{display:flex;align-items:center;flex:none;}
