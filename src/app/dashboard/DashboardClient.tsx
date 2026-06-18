@@ -118,9 +118,9 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
       setClanOpen(false);
       setClanCode('');
       await refresh();
-      push({ tone: 'energy', title: `Bienvenue dans ${res.clan.name}`, message: `Tu es le ${res.clan.size}ᵉ membre du clan.` });
+      push({ tone: 'energy', title: `Bienvenue dans ${res.clan.name}`, message: `Tu es le ${res.clan.size}ᵉ membre de l’équipe.` });
     } catch (e) {
-      push({ tone: 'info', title: 'Clan introuvable', message: e instanceof Error ? e.message : '' });
+      push({ tone: 'info', title: 'Équipe introuvable', message: e instanceof Error ? e.message : '' });
     } finally {
       setBusy(false);
     }
@@ -203,7 +203,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
 
           {/* STATS */}
           <Card variant="solid" padding="lg" className="b-stat"><StatTile label="KM ce mois" value={stats.kmThisMonth} unit="km" delta={stats.kmDeltaPct != null ? `${stats.kmDeltaPct >= 0 ? '+' : ''}${stats.kmDeltaPct}%` : null} deltaUp={(stats.kmDeltaPct ?? 0) >= 0} tone="energy" icon={ic.bike} /></Card>
-          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Rang clan" value={stats.clanRank ? `#${stats.clanRank}` : '—'} unit={stats.clanSize ? `/ ${stats.clanSize}` : ''} delta={null} tone="prestige" icon={ic.trophy} /></Card>
+          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Rang équipe" value={stats.clanRank ? `#${stats.clanRank}` : '—'} unit={stats.clanSize ? `/ ${stats.clanSize}` : ''} delta={null} tone="prestige" icon={ic.trophy} /></Card>
           <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Série en cours" value={stats.streakDays} unit={stats.streakDays > 1 ? 'jours' : 'jour'} delta={null} icon={ic.flame} /></Card>
           <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Récompenses" value={stats.rewardsCount} delta={stats.rewardsThisMonth > 0 ? `+${stats.rewardsThisMonth}` : null} icon={ic.gift} /></Card>
 
@@ -248,14 +248,13 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
                 <Button variant="ghost" size="sm" disabled iconLeft={ic.card} style={{ opacity: 0.55 }}>Ajouter au wallet</Button>
                 <Badge tone="neutral">Bientôt</Badge>
               </div>
-              <a href="/revendeurs" className="dash-revendeur">Trouver un revendeur partenaire →</a>
             </div>
           </Card>
 
           {/* CLAN LEADERBOARD */}
           <Card variant="glass" padding="lg" className="clan-tile b-clan">
             <div className="clan-head">
-              <h3>Classement · {clan?.name ?? 'Clan'}</h3>
+              <h3>Classement · {clan?.name ?? 'Équipe'}</h3>
               {clan ? (
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <Badge tone="blue">{board.length} membres</Badge>
@@ -271,9 +270,9 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
               </div>
             ) : (
               <div className="clan-empty">
-                <p>Tu n’as pas encore de clan. Saisis le code de ton ambassadeur pour rejoindre sa communauté et grimper le classement ensemble.</p>
-                <Button variant="energy" size="sm" onClick={() => setClanOpen(true)}>Rejoindre un clan</Button>
-                <span className="clan-empty__hint">Code démo : <b>VIDAL-LYON</b></span>
+                <p>Tu n’as pas encore d’équipe. Saisis le code de ton ambassadeur pour rejoindre sa communauté et grimper le classement ensemble.</p>
+                <Button variant="energy" size="sm" onClick={() => setClanOpen(true)}>Rejoindre une équipe</Button>
+                <span className="clan-empty__hint">Code démo : <b>BARDET-LYON</b></span>
               </div>
             )}
           </Card>
@@ -286,11 +285,11 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
 
       {clanOpen && (
         <CodeModal
-          eyebrow="Rejoindre un clan"
+          eyebrow="Rejoindre une équipe"
           title="Code de ton ambassadeur"
-          help="Ton ambassadeur t’a partagé un code de clan. Saisis-le pour rejoindre sa communauté."
-          placeholder="VIDAL-LYON"
-          hint="Code démo : VIDAL-LYON"
+          help="Ton ambassadeur t’a partagé un code d’équipe. Saisis-le pour rejoindre sa communauté."
+          placeholder="BARDET-LYON"
+          hint="Code démo : BARDET-LYON"
           value={clanCode}
           onChange={setClanCode}
           onConfirm={joinClan}

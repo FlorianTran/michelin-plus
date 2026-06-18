@@ -12,7 +12,7 @@ import './programme.css';
 export const metadata: Metadata = {
   title: 'Programme Ambassadeur — Michelin+',
   description:
-    "Deviens Créateur Michelin : un pourcentage reversé sur tes ventes, ton propre clan à animer et des éditions à ton nom. Démo aspirationnelle autour de Romain Bardet.",
+    "Deviens Créateur Michelin : un pourcentage reversé sur tes ventes, ta propre équipe à animer et des éditions à ton nom. Démo aspirationnelle autour de Romain Bardet.",
 };
 
 interface ValueProp {
@@ -33,7 +33,7 @@ const VALUES: ValueProp[] = [
       </svg>
     ),
     title: 'Reversés sur tes ventes',
-    body: 'Un pourcentage sur chaque pneu Michelin acheté via ton code. Plus ton clan roule, plus ton statut monte.',
+    body: 'Un pourcentage sur chaque pneu Michelin acheté via ton code. Plus ton équipe roule, plus ton statut monte.',
   },
   {
     icon: (
@@ -43,7 +43,7 @@ const VALUES: ValueProp[] = [
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    title: 'Ton propre clan',
+    title: 'Ta propre équipe',
     body: 'Recrute, anime, fédère. Tes membres cumulent les kilomètres sous tes couleurs et grimpent le classement ensemble.',
   },
   {
@@ -73,7 +73,7 @@ const STEPS: Step[] = [
   {
     n: '02',
     title: 'Reçois ton code',
-    body: 'Ton code personnel recrute tes membres et trace chaque vente. Ton clan se constitue, ton espace s’ouvre.',
+    body: 'Ton code personnel recrute tes membres et trace chaque vente. Ton équipe se constitue, ton espace s’ouvre.',
   },
   {
     n: '03',
@@ -110,7 +110,7 @@ export default function ProgrammeAmbassadeurPage() {
           </h1>
           <p className="pa-hero__strong">Ensemble, roulons plus loin.</p>
           <p className="pa-hero__lead">
-            Promeus, gagne un pourcentage, anime ton clan. Ton code recrute, tes membres roulent, ton
+            Promeus, gagne un pourcentage, anime ton équipe. Ton code recrute, tes membres roulent, ton
             cercle grandit — et débloque des éditions à ton nom.
           </p>
           <div className="pa-hero__cta">
@@ -226,7 +226,7 @@ export default function ProgrammeAmbassadeurPage() {
                 La gourde <em>Équipe Romain Bardet</em>.
               </h2>
               <p>
-                Le premier signe d’appartenance au clan : une gourde aux couleurs de l’équipe, remise dès
+                Le premier signe d’appartenance à l’équipe : une gourde aux couleurs de l’équipe, remise dès
                 tes premiers paliers franchis. Un indispensable pour toutes tes sorties — et celles de tes
                 membres.
               </p>
@@ -269,7 +269,7 @@ export default function ProgrammeAmbassadeurPage() {
               <ul>
                 <li>Figure publique du club, audience large</li>
                 <li>Éditions numérotées à son nom</li>
-                <li>Clan officiel &amp; événements VIP</li>
+                <li>Équipe officielle &amp; événements VIP</li>
               </ul>
             </Reveal>
             <Reveal className="pa-tier2 pa-tier2--micro">
@@ -279,7 +279,7 @@ export default function ProgrammeAmbassadeurPage() {
               <ul>
                 <li>Chef de club : tu animes ta communauté locale</li>
                 <li>Ton code recrute et trace tes ventes</li>
-                <li>Bonus de points quand ton clan progresse</li>
+                <li>Bonus de points quand ton équipe progresse</li>
               </ul>
               <p className="pa-tier2__eg">Ex. <b>Sofia</b> anime son club à Lyon Sud — code <code>SOFIA-CLUB</code>.</p>
             </Reveal>
@@ -295,7 +295,7 @@ export default function ProgrammeAmbassadeurPage() {
             <h2>Prêt à porter les couleurs ?</h2>
             <p>
               Les places d’ambassadeur sont rares et nominatives. Candidate dès maintenant pour ouvrir ton
-              espace, recevoir ton code et lancer ton clan.
+              espace, recevoir ton code et lancer ton équipe.
             </p>
             <div className="pa-cta__row">
               <Link href="/login">

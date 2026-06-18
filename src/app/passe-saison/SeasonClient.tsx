@@ -7,7 +7,7 @@ import { SiteFooter } from '@/components/site/SiteFooter';
 import { apiGet } from '@/lib/client-api';
 
 // ---- API contract ----
-interface SeasonInfo { id: string; name: string; endsAt: string; maxPoints: number }
+interface SeasonInfo { id: string; name: string; maxPoints: number }
 interface SeasonProgress { seasonPoints: number; currentStage: number; totalStages: number; pct: number }
 interface SeasonReward { stage: number; title: string; image: string | null; threshold: number; epic: boolean; claimed: boolean }
 interface SeasonMission { id: string; title: string; reward: string; points: number }
@@ -27,11 +27,6 @@ const ic = {
 };
 
 const fmt = (n: number) => n.toLocaleString('fr-FR');
-
-function daysLeft(endsAt: string): number {
-  const ms = new Date(endsAt).getTime() - Date.now();
-  return Math.max(0, Math.round(ms / 86_400_000));
-}
 
 function isMilestone(stage: number, total: number, epic: boolean): boolean {
   return epic || stage === total || stage % 10 === 0;
@@ -62,7 +57,7 @@ function StageRow({ reward, currentStage, totalStages }: { reward: SeasonReward;
         <div className="prow__text">
           <span className="prow__type">{reward.epic ? 'Édition épique' : 'Récompense'}</span>
           <span className="prow__name">{reward.title}</span>
-          <span className="prow__thr">{fmt(reward.threshold)} pts de saison</span>
+          <span className="prow__thr">{fmt(reward.threshold)} pts</span>
           {reward.epic ? (
             <span className="prow__flag"><Badge tone="prestige" size="sm" dot>Numérotée</Badge></span>
           ) : null}
@@ -111,13 +106,13 @@ export function SeasonClient() {
         {error ? (
           <p className="season__empty">{error}</p>
         ) : !data ? (
-          <p className="season__empty">Chargement de la saison…</p>
+          <p className="season__empty">Chargement…</p>
         ) : (
           <>
             {/* SEASON HERO */}
             <section className="season">
               <div className="season__info">
-                <Badge tone="prestige" dot>Passe Saison</Badge>
+                <Badge tone="prestige" dot>Étapes</Badge>
                 <h1 className="season__title">
                   <em>{data.season.name}</em>
                 </h1>
@@ -127,12 +122,8 @@ export function SeasonClient() {
                     <div className="v"><b>{data.progress.currentStage}</b> / {data.progress.totalStages}</div>
                   </div>
                   <div className="season__stat">
-                    <div className="l">Points de saison</div>
+                    <div className="l">Points</div>
                     <div className="v">{fmt(data.progress.seasonPoints)}</div>
-                  </div>
-                  <div className="season__stat">
-                    <div className="l">Fin de saison</div>
-                    <div className="v">{daysLeft(data.season.endsAt)} jours</div>
                   </div>
                 </div>
                 <div className="season__gauge">
@@ -141,7 +132,7 @@ export function SeasonClient() {
                     max={data.season.maxPoints}
                     current={`${data.progress.currentStage}`}
                     next={data.progress.currentStage < data.progress.totalStages ? `${data.progress.currentStage + 1}` : 'Max'}
-                    unit="pts de saison"
+                    unit="pts"
                     tone="prestige"
                   />
                 </div>
@@ -157,7 +148,7 @@ export function SeasonClient() {
                     <span className="pill-tier"><span className="dot" />Étape {grandPrix.stage} · Grand Prix</span>
                     <div className="grand__name">{grandPrix.title}</div>
                     <div className="grand__desc">
-                      Atteins l&rsquo;étape {grandPrix.stage} de la saison pour décrocher cette récompense d&rsquo;exception, réservée aux pilotes les plus assidus.
+                      Atteins l&rsquo;étape {grandPrix.stage}{' '}du parcours pour décrocher cette récompense d&rsquo;exception, réservée aux pilotes les plus assidus.
                     </div>
                   </div>
                 </div>
@@ -173,12 +164,12 @@ export function SeasonClient() {
               {data.rewards.map((r) => (
                 <StageRow key={r.stage} reward={r} currentStage={data.progress.currentStage} totalStages={data.progress.totalStages} />
               ))}
-              {data.rewards.length === 0 ? <p className="season__empty">Aucune récompense pour cette saison.</p> : null}
+              {data.rewards.length === 0 ? <p className="season__empty">Aucune récompense pour ce parcours.</p> : null}
             </div>
 
             {/* MISSIONS */}
             <section className="missions">
-              <h2>Gagne des points de saison</h2>
+              <h2>Gagne des points</h2>
               <div className="mgrid">
                 {data.missions.map((m) => (
                   <Card key={m.id} variant="solid" padding="none" className="mcardx">
@@ -186,7 +177,7 @@ export function SeasonClient() {
                     <h4>{m.title}</h4>
                     <p>{m.reward}</p>
                     <div className="mfoot">
-                      <span>Mission saison</span>
+                      <span>Mission</span>
                       <b>+{fmt(m.points)} pts</b>
                     </div>
                   </Card>

@@ -35,7 +35,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ action:
     }
 
     const user = await getCurrentUser();
-    if (!user) return fail('Connecte-toi (Léa ou Thomas) avant de piloter la démo', 401);
+    if (!user) return fail('Connecte-toi (Léa ou Romain) avant de piloter la démo', 401);
 
     switch (action) {
       case 'addPoints': {

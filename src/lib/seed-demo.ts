@@ -1,7 +1,7 @@
 // Michelin+ — Grip · canonical demo seed (shared by prisma/seed.ts + /api/debug/reset).
-// Léa (member, Titane, NO clan → joins live via code), Thomas (ambassador, Carbone,
-// owns clan "Gravel Lyon"), Sofia (micro-ambassadrice), rewards catalogue (numbered
-// editions + gourde Bardet), activation codes, season.
+// Léa (member, Titane, NO team → joins live via code), Romain Bardet (ambassador, Carbone,
+// owns team "Équipe Bardet"), Sofia (micro-ambassadrice), rewards catalogue (numbered
+// editions + gourde Bardet), activation codes, étapes ladder.
 import {
   PrismaClient,
   Role,
@@ -67,16 +67,16 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
   });
   const thomas = await db.user.create({
     data: {
-      email: 'thomas@michelin.plus',
+      email: 'romain@michelin.plus',
       passwordHash: hash,
-      name: 'Thomas Vidal',
+      name: 'Romain Bardet',
       role: Role.ambassador,
       memberId: 'M+ 0001 0007',
       sinceYear: '2023',
-      referralCode: 'VIDAL-26',
+      referralCode: 'BARDET-26',
     },
   });
-  // Sofia & Marc were referred by Thomas (his 2 000 referral pts = 2 filleuls × 1 000).
+  // Sofia & Marc were referred by Romain (his 2 000 referral pts = 2 filleuls × 1 000).
   const sofia = await db.user.create({
     data: { email: 'sofia@michelin.plus', passwordHash: hash, name: 'Sofia Bernardi', role: Role.member, sinceYear: '2025', referralCode: 'SOFIA-B7', referredById: thomas.id },
   });
@@ -124,16 +124,16 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
     ],
   });
 
-  // Thomas → Carbone (20 400)
+  // Romain → Carbone (20 400)
   await db.pointsEntry.createMany({
     data: [
       { userId: thomas.id, amount: 12000, type: PointsType.purchase, label: 'Ventes & achats ambassadeur', createdAt: daysAgo(120) },
       { userId: thomas.id, amount: 6400, type: PointsType.km, label: 'Kilomètres ambassadeur', createdAt: daysAgo(40) },
-      { userId: thomas.id, amount: 2000, type: PointsType.referral, label: 'Parrainages clan', createdAt: daysAgo(10) },
+      { userId: thomas.id, amount: 2000, type: PointsType.referral, label: 'Parrainages équipe', createdAt: daysAgo(10) },
     ],
   });
   await db.ambassadorProfile.create({
-    data: { userId: thomas.id, code: 'VIDAL-LYON', kind: 'ambassador', commissionPct: 12, salesCount: 87, ytdAmount: 2480, audience: 14200 },
+    data: { userId: thomas.id, code: 'BARDET-LYON', kind: 'ambassador', commissionPct: 12, salesCount: 87, ytdAmount: 2480, audience: 14200 },
   });
   // Sofia = micro-ambassadrice (chef de club) : commission moindre, communauté locale.
   await db.ambassadorProfile.create({
@@ -148,9 +148,9 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
     ],
   });
 
-  // Léa starts WITHOUT a clan on purpose → the demo shows her joining "Gravel Lyon"
-  // live via Thomas's code VIDAL-LYON (real ClanMember write, leaderboard updates).
-  const clan = await db.clan.create({ data: { name: 'Gravel Lyon', ambassadorUserId: thomas.id } });
+  // Léa starts WITHOUT a team on purpose → the demo shows her joining "Équipe Bardet"
+  // live via Romain's code BARDET-LYON (real ClanMember write, leaderboard updates).
+  const clan = await db.clan.create({ data: { name: 'Équipe Bardet', ambassadorUserId: thomas.id } });
   await db.clanMember.createMany({
     data: [
       { clanId: clan.id, userId: thomas.id, km: 1842 },
@@ -195,7 +195,7 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
       maxPoints: 25000,
       rewards: {
         create: [
-          { stage: 14, title: 'T-shirt édition saison', threshold: 7000, image: '/rewards/maillot-michelin.png', epic: false },
+          { stage: 14, title: 'T-shirt édition L’Ascension', threshold: 7000, image: '/rewards/maillot-michelin.png', epic: false },
           { stage: 20, title: 'Power Cup Carbone #042', threshold: 10000, image: '/tiers/tires-flockes.png', epic: true },
           { stage: 50, title: 'Pneus signés + Weekend VIP', threshold: 25000, image: '/tiers/tires-flockes.png', epic: true },
         ],
@@ -204,7 +204,7 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
         create: [
           { title: 'Roule 100 km cette semaine', reward: '+500 pts', points: 500 },
           { title: 'Active une carte produit', reward: '+2 000 pts', points: 2000 },
-          { title: 'Invite un ami au clan', reward: '+1 000 pts', points: 1000 },
+          { title: 'Invite un ami dans ton équipe', reward: '+1 000 pts', points: 1000 },
         ],
       },
     },

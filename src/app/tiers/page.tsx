@@ -1,7 +1,5 @@
-import Link from 'next/link';
 import { MarketingHeader } from '@/components/site/MarketingHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
-import { Button } from '@/components/grip';
 import { TIERS, type TierName } from '@/lib/tiers';
 import './tiers.css';
 
@@ -118,52 +116,11 @@ export default function TiersPage() {
                       </span>
                     ))}
                   </div>
-                  <div className="meta__cta">
-                    {tier.level === 1 ? (
-                      <Link href="/login">
-                        <Button variant="outline" size="sm">
-                          Rejoindre
-                        </Button>
-                      </Link>
-                    ) : (
-                      <Link href="/dashboard">
-                        <Button
-                          variant={tier.tone === 'prestige' ? 'prestige' : 'outline'}
-                          size="sm"
-                        >
-                          Voir ma progression
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
                 </div>
               </article>
             );
           })}
         </div>
-
-        {/* Footer CTA */}
-        <section className="tiers-cta">
-          <div className="tiers-cta__txt">
-            <h2>Ta carte t’attend.</h2>
-            <p>
-              Active ta carte, connecte Strava et regarde ta matière évoluer. Chaque kilomètre te
-              rapproche du carbone.
-            </p>
-          </div>
-          <div className="tiers-cta__actions">
-            <Link href="/login">
-              <Button variant="blue" size="lg">
-                Rejoindre le club
-              </Button>
-            </Link>
-            <Link href="/rewards">
-              <Button variant="prestige" size="lg">
-                Voir mes récompenses
-              </Button>
-            </Link>
-          </div>
-        </section>
       </div>
 
       <SiteFooter />

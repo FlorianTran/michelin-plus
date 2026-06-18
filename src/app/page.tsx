@@ -278,12 +278,6 @@ export default function Home() {
               <p>Connecte Strava : tes kilomètres deviennent des points. Grimpe les paliers, débloque les drops.</p>
             </div>
           </div>
-          <div className="lp-ropo mch-reveal">
-            <span>En ligne ou en magasin — le pont fonctionne dans les deux sens.</span>
-            <Link href="/revendeurs">
-              <Button variant="outline" size="md">Trouver un revendeur</Button>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -387,8 +381,8 @@ export default function Home() {
                   <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
               </span>
-              <h4>Clans &amp; classements</h4>
-              <p>Rejoins le clan d’un ambassadeur. Cumule les km, grimpe le classement, gagne des tirages.</p>
+              <h4>Équipes &amp; classements</h4>
+              <p>Rejoins l’équipe d’un ambassadeur. Cumule les km, grimpe le classement, gagne des tirages.</p>
             </div>
             <div className="lp-feature lp-feature--gold mch-reveal">
               <span className="lp-feature__ic">
@@ -426,23 +420,23 @@ export default function Home() {
                 </svg>
               </span>
               <h4>Statut ambassadeur</h4>
-              <p>Le badge « Créateur Michelin », un % sur les ventes, ton propre clan à animer.</p>
+              <p>Le badge « Créateur Michelin », un % sur les ventes, ta propre équipe à animer.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PASSE SAISON */}
+      {/* PARCOURS — ÉTAPES */}
       <section className="mch-section" id="passe">
         <div className="mch-container">
           <div className="lp-passe mch-reveal">
             <div>
-              <span className="lp-chip lp-chip--gold">Saison 01 · L’Ascension</span>
+              <span className="lp-chip lp-chip--gold">Parcours · L’Ascension</span>
               <h2 className="mch-title">
-                Une <em>saison</em>, des étapes, des récompenses à chaque pas.
+                Un <em>parcours</em>, des étapes, des récompenses à chaque pas.
               </h2>
               <p>
-                Chaque étape franchie débloque avantages, éditions limitées et défis de saison. Le
+                Chaque étape franchie débloque avantages, éditions limitées et défis. Le
                 palier Carbone ouvre la voie aux pneus signés et aux places d’événements VIP.
               </p>
               <Link href="/passe-saison">
@@ -455,7 +449,7 @@ export default function Home() {
               <div className="lp-prow">
                 <span className="lp-prow__n">14</span>
                 <div className="lp-prow__b">
-                  <b>T-shirt édition saison</b>
+                  <b>T-shirt édition L’Ascension</b>
                   <span>Palier actuel · Standard</span>
                 </div>
                 <span className="lp-prow__tag" style={{ color: 'var(--text-secondary)' }}>
@@ -474,7 +468,7 @@ export default function Home() {
                 <span className="lp-prow__n">50</span>
                 <div className="lp-prow__b">
                   <b>Pneus signés + Weekend VIP</b>
-                  <span>Grand tirage de fin de saison</span>
+                  <span>Grand tirage du parcours</span>
                 </div>
                 <span className="lp-prow__tag">Grand prix</span>
               </div>
@@ -553,7 +547,7 @@ export default function Home() {
                 Deviens un <em>Créateur Michelin</em>.
               </h2>
               <p>
-                Promeus, gagne un pourcentage, anime ton clan. Ton code recrute, tes membres roulent,
+                Promeus, gagne un pourcentage, anime ton équipe. Ton code recrute, tes membres roulent,
                 ton cercle grandit — et débloque des éditions à ton nom.
               </p>
               <Link href="/programme-ambassadeur">
@@ -570,7 +564,7 @@ export default function Home() {
                 12<span>% reversés</span>
               </div>
               <div className="lp-amb-card__tread" />
-              <p>Sur chaque vente via ton code. Plus ton clan roule, plus ton statut monte.</p>
+              <p>Sur chaque vente via ton code. Plus ton équipe roule, plus ton statut monte.</p>
             </div>
           </div>
         </div>

@@ -164,7 +164,7 @@ export default function DebugPage() {
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
           <Button variant="blue" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'lea@michelin.plus', password: 'demo1234' }); await refresh(); await loadState(); push({ title: 'Connecté · Léa', tone: 'energy' }); }}>Login Léa</Button>
-          <Button variant="prestige" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'thomas@michelin.plus', password: 'demo1234' }); await refresh(); await loadState(); push({ title: 'Connecté · Thomas', tone: 'prestige' }); }}>Login Thomas</Button>
+          <Button variant="prestige" size="sm" onClick={async () => { await apiPost('/api/auth/login', { email: 'romain@michelin.plus', password: 'demo1234' }); await refresh(); await loadState(); push({ title: 'Connecté · Romain Bardet', tone: 'prestige' }); }}>Login Romain Bardet</Button>
         </div>
       </Card>
 
@@ -203,7 +203,7 @@ export default function DebugPage() {
 
         <Panel title="Toast & reset">
           <Button variant="ghost" size="sm" full onClick={() => run('triggerToast', { title: 'Test toast', points: '+250 pts' })}>Déclencher un toast</Button>
-          <Button variant="outline" size="sm" full onClick={async () => { await run('reset', {}, { title: 'Démo réinitialisée', tone: 'info' }); push({ title: 'Session déconnectée', message: 'Re-login Léa/Thomas', tone: 'info' }); setMe(null); }}>Reset démo</Button>
+          <Button variant="outline" size="sm" full onClick={async () => { await run('reset', {}, { title: 'Démo réinitialisée', tone: 'info' }); push({ title: 'Session déconnectée', message: 'Re-login Léa/Romain', tone: 'info' }); setMe(null); }}>Reset démo</Button>
         </Panel>
       </div>
 

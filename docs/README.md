@@ -9,6 +9,7 @@ Contexte produit & design de l'app. **Lire dans cet ordre :**
 5. **[SCREENS.md](SCREENS.md)** — inventaire des écrans + priorité.
 6. **[SOLUTION.md](SOLUTION.md)** — le concept Michelin+.
 7. **[PROJECT_PLAN.md](PROJECT_PLAN.md)** — périmètre réel/mock, stack, planning.
+8. **[GUIDE_UTILISATEUR.md](GUIDE_UTILISATEUR.md)** — guide utilisateur final (membre & ambassadeur), écran par écran.
 
 ## En bref
 **Michelin+** : web app premium pour cyclistes passionnés. Activation post-achat (carte+code), points & paliers, récompenses & éditions limitées, ambassadeurs & clans. **Objectif : effet WOW, design-first.**

@@ -75,7 +75,7 @@ export function AmbassadorClient() {
           <span className="mch-eyebrow" style={{ color: 'var(--gold-400)' }}>Programme Créateur</span>
           <h1>Deviens <em>Créateur Michelin</em>.</h1>
           <p>
-            Anime ton clan, façonne tes éditions numérotées et touche une commission sur chaque vente
+            Anime ton équipe, façonne tes éditions numérotées et touche une commission sur chaque vente
             générée par ton code. Le cercle des ambassadeurs Michelin+ est sur invitation.
           </p>
           <Link href="/programme-ambassadeur"><Button variant="prestige">Rejoindre le programme</Button></Link>
@@ -132,7 +132,7 @@ export function AmbassadorClient() {
             <h1 className="amb__name">{user.name}</h1>
             <p className="amb__bio">
               {clan
-                ? `J'anime le ${clan.name} et je façonne des éditions numérotées avec Michelin+. Mon cercle roule, ma communauté grandit.`
+                ? `J'anime ${clan.name} et je façonne des éditions numérotées avec Michelin+. Mon cercle roule, ma communauté grandit.`
                 : `Je façonne des éditions numérotées avec Michelin+ et je fais grandir ma communauté de passionnés.`}
             </p>
             <div className="amb__since">
@@ -190,7 +190,7 @@ export function AmbassadorClient() {
           {/* CLAN LEADERBOARD */}
           <Card variant="glass" padding="lg" className="clan-tile ab-clan">
             <div className="clan-head">
-              <h3>Mon clan{clan ? ` · ${clan.name}` : ''}</h3>
+              <h3>Mon équipe{clan ? ` · ${clan.name}` : ''}</h3>
               {clan ? <Badge tone="blue">{clan.size} membres</Badge> : null}
             </div>
             {leaderboard.length ? (
@@ -200,7 +200,7 @@ export function AmbassadorClient() {
                 ))}
               </div>
             ) : (
-              <p className="clan-empty">Tu n&apos;animes pas encore de clan. Invite tes premiers filleuls avec ton code.</p>
+              <p className="clan-empty">Tu n&apos;animes pas encore d&apos;équipe. Invite tes premiers filleuls avec ton code.</p>
             )}
           </Card>
 
@@ -221,7 +221,7 @@ export function AmbassadorClient() {
             <div className="next-tile__b" style={{ padding: 22 }}>
               <Badge tone="prestige" size="sm" dot>Événement ambassadeur</Badge>
               <h4>Sortie officielle · Col du Galibier</h4>
-              <p>Anime ton clan en conditions réelles, {firstName}. 14 places VIP à attribuer.</p>
+              <p>Anime ton équipe en conditions réelles, {firstName}. 14 places VIP à attribuer.</p>
             </div>
           </Card>
         </div>
