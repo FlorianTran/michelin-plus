@@ -25,3 +25,6 @@ next-env.d.ts
 
 # prisma generated client (regenerated on install/build)
 /src/generated
+
+# local-only demo cheat sheet (not for the repo)
+DEMO_GUIDE.md
