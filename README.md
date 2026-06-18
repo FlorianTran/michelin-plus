@@ -41,7 +41,7 @@ npm run dev                 # http://localhost:3000
 
 | Compte | Email | Rôle | Palier |
 |---|---|---|---|
-| **Léa Moreau** | `lea@michelin.plus` | membre | Titane (12 480 pts) |
+| **Léa Moreau** | `lea@michelin.plus` | membre | Titane (12 838 pts) |
 | **Thomas Vidal** | `thomas@michelin.plus` | ambassadeur | Carbone |
 
 Raccourci : `/login` propose des boutons « Entrer comme Léa / Thomas ».
@@ -50,12 +50,14 @@ Raccourci : `/login` propose des boutons « Entrer comme Léa / Thomas ».
 ## Parcours démo (happy path)
 
 1. `/login` → « Entrer comme Léa ».
-2. Dashboard → **Activer une carte** (`GRIP-2000`) → +2 000 pts + toast.
-3. **Synchroniser Strava** → km mockés → le compteur monte, la jauge de palier progresse.
-4. **Forcer Carbone** depuis `/debug` (ou cumuler) → la jauge passe Titane → Carbone.
-5. **Prochaine récompense** → *Débloquer* une édition numérotée → modal de déblocage.
-6. **Classement du clan** Gravel Lyon (réordonné par km, en temps réel).
-7. Bascule **ambassadeur** (Thomas) → code, commission, clan, programme Bardet.
+2. Dashboard → stats **calculées** depuis la DB : km du mois (+ delta vs mois dernier),
+   série de jours consécutifs, rang dans le clan, points par source.
+3. **Activer une carte** → saisir `CARBON-CDM` (+3 000 pts) → Léa passe **Titane → Carbone**.
+4. **Pop-up de palier** : l'édition numérotée nouvellement débloquée s'affiche en récompense vedette.
+5. `/rewards` → catalogue réel, dont la **casquette** et le **t-shirt** « L'Exception » → *Débloquer*.
+6. `/parrainage` → lien partageable + filleule **Inès** (parrainage réel, points gagnés).
+7. Rejoindre le clan **Gravel Lyon** via le code **`VIDAL-LYON`** → le classement se réordonne en direct.
+8. `/wallet` → la carte digitale **Carbone** de Léa (solde, palier, n° de membre), prête à présenter.
 
 ### Page debug — `/debug`
 
@@ -87,7 +89,7 @@ npm run build        # prisma generate + next build (sortie standalone)
 npm start            # serveur de prod
 npm run lint         # ESLint (flat config)
 npm run type-check   # tsc --noEmit
-npm test             # Vitest (moteur points/paliers + activation)
+npm test             # Vitest (points/paliers + activation, stats dashboard, sélection de récompense)
 npm run db:seed      # (re)peupler la démo
 npm run db:reset     # reset migrations + reseed
 ```
