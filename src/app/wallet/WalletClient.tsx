@@ -1,8 +1,11 @@
 'use client';
 import React from 'react';
 import './wallet.css';
-import { Card, Badge, Button, MemberCard } from '@/components/grip';
+import { Card, Badge, Button } from '@/components/grip';
 import { AppHeader } from '@/components/site/AppHeader';
+import { BottomTabBar } from '@/components/site/BottomTabBar';
+import { PhoneFrame } from '@/components/site/PhoneFrame';
+import { WalletPassMock } from '@/components/site/WalletPassMock';
 import { SiteFooter } from '@/components/site/SiteFooter';
 
 export interface WalletCard {
@@ -95,16 +98,14 @@ export function WalletClient({ card, authed }: WalletClientProps) {
 
         <section className="wallet__showcase">
           <Card variant="glass" padding="lg" className="wallet__card-tile">
-            <MemberCard
-              name={card.name}
-              tier={card.tier}
-              memberId={card.memberId}
-              points={card.points}
-              since={card.since}
-              variant={accent}
-            />
+            <div className="wallet__phone">
+              <PhoneFrame width={344}>
+                <WalletPhoneScreen card={card} />
+              </PhoneFrame>
+            </div>
             <p className="wallet__card-caption">
-              Aperçu de la carte telle qu’elle apparaîtra dans ton wallet — design définitif.
+              Intégration Apple Wallet — la carte, le code à présenter en magasin et l’activité, telles
+              qu’elles apparaîtront sur ton téléphone.
             </p>
           </Card>
 
@@ -179,6 +180,46 @@ export function WalletClient({ card, authed }: WalletClientProps) {
       </main>
 
       <SiteFooter />
+      <BottomTabBar />
+    </div>
+  );
+}
+
+// Illustrative Wallet activity (the pass itself uses the member's real data).
+const WALLET_ACTIVITY: { label: string; value: string; muted?: boolean }[] = [
+  { label: 'Sortie gravel · 42 km', value: '+423 pts' },
+  { label: 'Power Cup · activée', value: '+2 000 pts' },
+  { label: 'Palier atteint', value: 'Statut', muted: true },
+];
+
+/** WalletPhoneScreen — the "Cartes" (Apple Wallet) screen shown inside the PhoneFrame. */
+function WalletPhoneScreen({ card }: { card: WalletCard }) {
+  return (
+    <div className="wallet-screen">
+      <div className="wallet-screen__title">Cartes</div>
+      <WalletPassMock name={card.name} tier={card.tier} points={card.points} memberId={card.memberId} since={card.since} />
+
+      <div className="wallet-screen__qr">
+        <div className="wallet-screen__qrcode" aria-hidden="true">
+          {Array.from({ length: 49 }).map((_, i) => (
+            <span key={i} style={{ background: (i * 37 % 5 < 2 || i % 9 === 0) ? '#0A0A0C' : 'transparent' }} />
+          ))}
+        </div>
+        <div className="wallet-screen__qr-copy">
+          <div className="wallet-screen__qr-eyebrow">Présenter en magasin</div>
+          <div className="wallet-screen__qr-title">Scanne pour créditer</div>
+          <div className="wallet-screen__qr-sub">Achats &amp; activations comptés en points.</div>
+        </div>
+      </div>
+
+      <div className="wallet-screen__activity">
+        {WALLET_ACTIVITY.map((a) => (
+          <div className="wallet-screen__act" key={a.label}>
+            <span className="wallet-screen__act-label">{a.label}</span>
+            <span className={`wallet-screen__act-val${a.muted ? ' is-muted' : ''}`}>{a.value}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

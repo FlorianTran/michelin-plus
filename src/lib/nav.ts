@@ -16,6 +16,16 @@ export const APP_NAV: { label: string; href: string; key: string }[] = [
   { label: 'Parrainage', href: '/parrainage', key: 'parrainage' },
 ];
 
+// Mobile bottom tab bar (≤700px, member pages only). Maps the four thumb-reachable
+// destinations onto existing routes — mirrors ui_kits/member-dashboard-mobile.
+export type MemberTabIcon = 'home' | 'gift' | 'clan' | 'card';
+export const MEMBER_TABS: { label: string; href: string; icon: MemberTabIcon }[] = [
+  { label: 'Accueil', href: '/dashboard', icon: 'home' },
+  { label: 'Récompenses', href: '/rewards', icon: 'gift' },
+  { label: 'Clan', href: '/parrainage', icon: 'clan' },
+  { label: 'Carte', href: '/wallet', icon: 'card' },
+];
+
 export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: 'Programme',

@@ -115,4 +115,32 @@
   .b-stat { grid-column: span 6; }
   .b-feed { grid-row: auto; }
 }
-@media (max-width: 600px) { .b-stat { grid-column: span 12; } }
+/* Desktop: actions live in the header; relocated into the points card on mobile. */
+.points-card__actions { display: none; }
+
+/* ---- Mobile dashboard (match ui_kits/member-dashboard-mobile) ---- */
+@media (max-width: 700px) {
+  .dash__main { padding: clamp(14px, 4vw, 20px) clamp(14px, 4vw, 18px) calc(88px + env(safe-area-inset-bottom)); }
+
+  /* Condensed greeting, header actions removed from the top flow. */
+  .dash__hello { margin-bottom: 18px; gap: 10px; }
+  .dash__hello h1 { font-size: 1.5rem; }
+  .dash__hello p { font-size: 0.875rem; }
+  .dash__hello-actions { display: none; }
+
+  /* Tighter bento rhythm. */
+  .bento { gap: 12px; }
+
+  /* Hero points card: fixed big counter + in-card actions. */
+  .b-points.points-card .mch-counter--lg { font-size: 2.7rem; }
+  .points-card__actions { display: flex; gap: 10px; margin-top: 2px; }
+  .points-card__actions .mch-btn { flex: 1; }
+
+  /* Stats stay 2×2 (not 1-up) and drop their icons — data-viz density. */
+  .bento .mch-stat__ic { display: none; }
+  .bento .mch-stat__val { font-size: 1.7rem; }
+
+  /* Feed: cap at 3 rows, truncate titles. */
+  .b-feed .feed-row:nth-child(n+5) { display: none; }
+  .feed-body b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}

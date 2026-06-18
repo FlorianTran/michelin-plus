@@ -48,8 +48,15 @@
 .parr__steps li span { font-family: var(--font-body); font-size: 0.8125rem; color: var(--text-secondary); }
 
 @media (max-width: 960px) {
-  .parr__hero { grid-template-columns: 1fr; }
+  /* minmax(0,1fr) lets the track shrink below content min-size (the long
+     referral URL is clipped by .parr__link instead of blowing out the grid). */
+  .parr__hero { grid-template-columns: minmax(0, 1fr); }
   .parr__hero-media { order: -1; }
-  .parr__stats { grid-template-columns: 1fr; }
-  .parr__grid { grid-template-columns: 1fr; }
+  .parr__stats { grid-template-columns: minmax(0, 1fr); }
+  .parr__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Clear the fixed BottomTabBar on member mobile. */
+@media (max-width: 700px) {
+  .parr__main { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
 }

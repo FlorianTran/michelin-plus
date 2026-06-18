@@ -23,6 +23,7 @@ export function AppHeader({ points = null, name = '', accent = 'energy', activeK
       authed
       points={points}
       accent={accent}
+      mobileNav="tabs"
       avatar={<a href="/dashboard"><Avatar name={name || 'Membre'} size="md" ring={accent} /></a>}
     />
   );

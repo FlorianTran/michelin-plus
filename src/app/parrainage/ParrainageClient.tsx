@@ -3,6 +3,7 @@ import React from 'react';
 import './parrainage.css';
 import { Card, Badge, Button, StatTile, Avatar } from '@/components/grip';
 import { AppHeader } from '@/components/site/AppHeader';
+import { BottomTabBar } from '@/components/site/BottomTabBar';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { ToastStack, useToasts } from '@/components/site/ToastStack';
 import { apiGet } from '@/lib/client-api';
@@ -140,6 +141,7 @@ export function ParrainageClient({ name, points, accent }: { name: string; point
 
       <SiteFooter />
       <ToastStack toasts={toasts} onDismiss={dismiss} />
+      <BottomTabBar />
     </div>
   );
 }

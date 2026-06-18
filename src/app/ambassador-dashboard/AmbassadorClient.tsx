@@ -4,6 +4,7 @@ import Link from 'next/link';
 import './ambassador.css';
 import { Card, Badge, Button, StatTile, MemberCard, LeaderboardRow, Avatar } from '@/components/grip';
 import { AppHeader } from '@/components/site/AppHeader';
+import { BottomTabBar } from '@/components/site/BottomTabBar';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { apiGet } from '@/lib/client-api';
 
@@ -80,6 +81,7 @@ export function AmbassadorClient() {
           <Link href="/programme-ambassadeur"><Button variant="prestige">Rejoindre le programme</Button></Link>
         </main>
         <SiteFooter />
+        <BottomTabBar />
       </div>
     );
   }
@@ -94,6 +96,7 @@ export function AmbassadorClient() {
           <p>{error}</p>
         </main>
         <SiteFooter />
+        <BottomTabBar />
       </div>
     );
   }
@@ -104,6 +107,7 @@ export function AmbassadorClient() {
         <div className="amb__aurora" />
         <AppHeader accent="prestige" />
         <main className="amb__main"><p style={{ color: 'var(--text-tertiary)' }}>Chargement…</p></main>
+        <BottomTabBar />
       </div>
     );
   }
@@ -224,6 +228,7 @@ export function AmbassadorClient() {
       </main>
 
       <SiteFooter />
+      <BottomTabBar />
     </div>
   );
 }

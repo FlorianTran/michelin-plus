@@ -3,6 +3,7 @@ import React from 'react';
 import './rewards.css';
 import { Card, Badge, RewardCard, UnlockDialog } from '@/components/grip';
 import { AppHeader } from '@/components/site/AppHeader';
+import { BottomTabBar } from '@/components/site/BottomTabBar';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { ToastStack, useToasts } from '@/components/site/ToastStack';
 import { apiGet, apiPost } from '@/lib/client-api';
@@ -186,6 +187,7 @@ export function RewardsClient({ name }: { name: string }) {
       ) : null}
 
       <ToastStack toasts={toasts} onDismiss={dismiss} />
+      <BottomTabBar />
     </div>
   );
 }

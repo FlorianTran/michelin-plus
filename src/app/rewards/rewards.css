@@ -41,3 +41,8 @@
 @media (max-width: 640px) {
   .rwd__band { width: 100%; }
 }
+
+/* Clear the fixed BottomTabBar on member mobile. */
+@media (max-width: 700px) {
+  .rwd__main { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+}

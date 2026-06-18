@@ -6,6 +6,7 @@ import {
   Card, Badge, Button, PointsCounter, TierGauge, StatTile, MemberCard, UnlockDialog, LeaderboardRow,
 } from '@/components/grip';
 import { AppHeader } from '@/components/site/AppHeader';
+import { BottomTabBar } from '@/components/site/BottomTabBar';
 import { ToastStack, useToasts } from '@/components/site/ToastStack';
 import { apiGet, apiPost } from '@/lib/client-api';
 import type { DashboardState } from '@/lib/dashboard';
@@ -159,6 +160,11 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
               <div><span>Achats</span><b>{points.fromPurchases.toLocaleString('fr-FR')}</b></div>
               <div><span>Kilomètres</span><b>{points.fromKm.toLocaleString('fr-FR')}</b></div>
             </div>
+            {/* Mobile-only: actions relocated from the header into the hero card (app-like). */}
+            <div className="points-card__actions">
+              <Button variant="blue" size="sm" className="dash-sync" iconLeft={ic.sync} disabled={busy} onClick={syncStrava}>Strava</Button>
+              <Button variant="energy" size="sm" className="dash-activate" disabled={busy} onClick={() => setActivateOpen(true)}>Activer</Button>
+            </div>
           </Card>
 
           {/* TIER GAUGE */}
@@ -290,6 +296,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
       )}
 
       <ToastStack toasts={toasts} onDismiss={dismiss} />
+      <BottomTabBar />
     </div>
   );
 }

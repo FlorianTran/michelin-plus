@@ -19,6 +19,8 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   onCta?: () => void;
   lang?: string;
   accent?: 'energy' | 'prestige';
+  /** 'tabs' hides the hamburger ≤700px (a BottomTabBar carries nav there); 'drawer' keeps it. */
+  mobileNav?: 'drawer' | 'tabs';
 }
 
 /** Header — sticky glass app/site header with a mobile hamburger + drawer. */
@@ -32,6 +34,7 @@ export function Header({
   onCta,
   lang = 'FR',
   accent = 'energy',
+  mobileNav = 'drawer',
   style = {},
   className = '',
   ...rest
@@ -104,6 +107,9 @@ export function Header({
       .mch-header__right .mch-btn{display:none;}
     }
     @media(min-width:961px){.mch-drawer{display:none;}}
+
+    /* mobileNav="tabs": ≤700px the BottomTabBar replaces the drawer, so drop the burger. */
+    @media(max-width:700px){.mch-header--tabs .mch-header__burger{display:none;}}
   `);
 
   const wordmark = logoSrc
@@ -112,7 +118,7 @@ export function Header({
 
   return (
     <>
-      <header className={`mch-header mch-header--${accent}${className ? ' ' + className : ''}`} style={style} {...rest}>
+      <header className={`mch-header mch-header--${accent}${mobileNav === 'tabs' ? ' mch-header--tabs' : ''}${className ? ' ' + className : ''}`} style={style} {...rest}>
         <a className="mch-header__logo" href="/">{wordmark}</a>
         <nav className="mch-header__nav">
           {links.map((l, i) => (
