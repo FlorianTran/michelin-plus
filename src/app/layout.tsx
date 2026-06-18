@@ -2,11 +2,30 @@ import type { Metadata } from 'next';
 import '../styles/globals.css';
 import { CookieBanner } from '@/components/site/CookieBanner';
 
+const SITE_TITLE = 'Michelin+ — Le club des cyclistes premium';
+const SITE_DESCRIPTION =
+  'Chaque kilomètre te rapproche de l’exception. Points, paliers, éditions numérotées, clans — le programme communautaire Michelin+ (démo hackathon).';
+const OG_IMAGE = '/cards/card-carbon-premium.png';
+
 export const metadata: Metadata = {
-  title: 'Michelin+ — Le club des cyclistes premium',
-  description:
-    'Chaque kilomètre te rapproche de l’exception. Points, paliers, éditions numérotées, clans — le programme communautaire Michelin+ (démo hackathon).',
+  metadataBase: new URL('https://michelin.plus'),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   icons: { icon: '/brand/logo-michelin-plus.svg' },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: 'Michelin+',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [{ url: OG_IMAGE, width: 1332, height: 800, alt: 'Carte Michelin+ carbone, liseré or' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
