@@ -8,7 +8,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const me = await getCurrentUser();
 
     const clan = await prisma.clan.findUnique({ where: { id } });
-    if (!clan) return fail('Clan introuvable', 404);
+    if (!clan) return fail('Équipe introuvable', 404);
 
     const roster = await prisma.clanMember.findMany({
       where: { clanId: id },
