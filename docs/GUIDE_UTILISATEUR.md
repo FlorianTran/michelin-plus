@@ -22,7 +22,7 @@ Michelin+ est le **club des cyclistes premium**. L'idée tient en trois temps :
   soit le canal.
 - **Des points, des paliers.** Tu gagnes des points par tes **achats** et tes **kilomètres**, et tu
   grimpes trois paliers : **Aluminium → Titane → Carbone**. Plus le palier est haut, plus tu débloques.
-- **Une communauté.** Tu rejoins le **clan** d'un ambassadeur, tu compares tes km au classement, tu
+- **Une communauté.** Tu rejoins l'**équipe** d'un ambassadeur, tu compares tes km au classement, tu
   parraines des amis, et tu débloques des **récompenses** et des **éditions numérotées**.
 
 **Pour qui ?** Les cyclistes passionnés qui roulent régulièrement (côté membre), et les chefs de club
@@ -55,9 +55,8 @@ Pour explorer sans rien créer, deux boutons « Démo rapide » te connectent en
 | **Entrer comme Léa (membre)** | Léa Moreau | `lea@michelin.plus` | membre | Titane | `/dashboard` |
 | **Entrer comme Romain Bardet (ambassadeur)** | Romain Bardet | `romain@michelin.plus` | ambassadeur | Carbone | `/ambassador-dashboard` |
 
-> *Léa* incarne la persona « membre » et *Romain Bardet* la persona « ambassadeur » des docs produit
-> (parfois appelée « Thomas » dans `docs/PERSONAS.md`). Pour utiliser l'app, ce sont bien ces deux
-> comptes-là.
+> *Léa* incarne la persona « membre » et *Romain Bardet* la persona « ambassadeur » des docs produit.
+> Pour utiliser l'app, ce sont bien ces deux comptes-là.
 
 ### Se repérer dans la navigation
 
@@ -123,13 +122,13 @@ C'est ton écran principal de membre. Toutes les valeurs sont **calculées depui
 - **Solde de points** — ton total, et la répartition : *ce mois*, *achats*, *kilomètres*.
 - **Progression de palier** — une jauge vers le palier suivant + ce que ton palier actuel débloque.
 - **KM ce mois** — avec le delta (±%) par rapport au mois précédent.
-- **Rang équipe** — ta position dans le classement de ton clan (si tu en as un).
+- **Rang équipe** — ta position dans le classement de ton équipe (si tu en as une).
 - **Série en cours** — ton nombre de jours consécutifs de sortie.
 - **Récompenses** — combien tu en as déjà débloquées.
 - **Activité récente** — le fil de tes sorties, achats et paliers atteints.
 - **Prochaine récompense** — la prochaine à portée, débloquable directement.
 - **Ta carte de membre** — aperçu de ta carte (nom, palier, numéro, points).
-- **Classement du clan** — les km cumulés de ton équipe, mis à jour en direct.
+- **Classement de l'équipe** — les km cumulés de ton équipe, mis à jour en direct.
 
 Les boutons **« Synchroniser Strava »** et **« Activer une carte »** sont accessibles en haut de cet
 écran (et dans la carte « Solde de points » sur mobile).
@@ -172,7 +171,7 @@ Quand tu débloques, une fenêtre de confirmation l'ajoute à ton espace membre.
 
 ## 8. Étapes — le parcours « L'Ascension » (`/passe-saison`)
 
-Accessible via **Étapes** dans le menu public. C'est un parcours de progression saisonnier, baptisé
+Accessible via **Étapes** dans le menu public. C'est un parcours de progression, baptisé
 **« L'Ascension »** :
 
 - **Le ladder (échelle d'étapes)** — une suite d'étapes ; chaque palier d'étape débloque une
@@ -206,9 +205,9 @@ Invite des amis, gagnez tous les deux.
 
 ---
 
-## 10. Rejoindre un clan
+## 10. Rejoindre une équipe
 
-Un clan (équipe) regroupe les membres d'un ambassadeur autour d'un classement de kilomètres.
+Une équipe regroupe les membres d'un ambassadeur autour d'un classement de kilomètres.
 
 1. Depuis le **tableau de bord**, dans la carte **Classement**, clique sur **« Rejoindre une équipe »**
    (ou le bouton **« + Code »** si tu es déjà dans une équipe).
@@ -242,7 +241,7 @@ tableau de bord créateur :
 - **Ton code ambassadeur** (`BARDET-LYON`) — copiable en un clic pour le partager.
 - **Commission & revenus** — pourcentage par vente, total reversé sur l'année, nombre de ventes
   générées, taille de ton audience.
-- **Ton équipe** — le **classement des km** de tes membres, et la croissance du clan.
+- **Ton équipe** — le **classement des km** de tes membres, et la croissance de l'équipe.
 - **Tes éditions ambassadeur** et le prochain **événement ambassadeur**.
 
 > Si tu ouvres cet espace avec un compte **membre** (non ambassadeur), tu vois un écran d'invitation
