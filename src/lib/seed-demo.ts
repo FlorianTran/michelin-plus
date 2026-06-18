@@ -83,27 +83,44 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
   const marc = await db.user.create({
     data: { email: 'marc@michelin.plus', passwordHash: hash, name: 'Marc Petit', role: Role.member, sinceYear: '2025', referralCode: 'MARC-P3', referredById: thomas.id },
   });
+  // Inès is Léa's filleule (joined via her referral link) → showcases the referral reward.
   const ines = await db.user.create({
-    data: { email: 'ines@michelin.plus', passwordHash: hash, name: 'Inès Caron', role: Role.member, sinceYear: '2025', referralCode: 'INES-C9' },
+    data: { email: 'ines@michelin.plus', passwordHash: hash, name: 'Inès Caron', role: Role.member, sinceYear: '2025', referralCode: 'INES-C9', referredById: lea.id, createdAt: daysAgo(20) },
   });
 
-  // Léa lifetime 12 480 → Titane (km 6 280 · purchases 6 200)
+  // ── Léa — the demo persona ──────────────────────────────────────────────
+  // Real loyalty data so every dashboard stat is computed, not hardcoded:
+  //   · km this month (6 rides incl. a 5-day streak) > km last month (3 rides) → +% delta
+  //   · current streak = 5 consecutive days · 1 referral (Inès) · 1 reward already claimed
+  // Lifetime ≈ 12 838 → Titane, ~78% toward Carbone, so activating CARBON-CDM (3 000)
+  // crosses into Carbone live and fires the reward pop-up.
+  //
+  // Strava rides — last month (delta baseline) + this month (incl. recent 5-day streak).
+  const leaRides = [
+    { name: 'Sortie longue · Mont Ventoux', km: 58.0, elevation: 1620, date: daysAgo(38) },
+    { name: 'Sortie route · Gorges du Verdon', km: 51.0, elevation: 980, date: daysAgo(34) },
+    { name: 'Gravel · Plateau de Valensole', km: 43.0, elevation: 540, date: daysAgo(30) },
+    { name: 'Sortie longue · Forêt de Rambouillet', km: 68.1, elevation: 720, date: daysAgo(10) },
+    { name: 'Sortie gravel · Vallée de Chevreuse', km: 42.3, elevation: 1240, date: daysAgo(4) },
+    { name: 'Boucle des Yvelines', km: 27.0, elevation: 410, date: daysAgo(3) },
+    { name: 'Sortie matinale · Bois de Vincennes', km: 18.7, elevation: 180, date: daysAgo(2) },
+    { name: 'Gravel · Plateau de Saclay', km: 31.2, elevation: 360, date: daysAgo(1) },
+    { name: 'Sortie récup · Coulée verte', km: 24.5, elevation: 150, date: daysAgo(0) },
+  ];
   await db.pointsEntry.createMany({
     data: [
-      { userId: lea.id, amount: 423, type: PointsType.km, label: 'Sortie gravel · Vallée de Chevreuse', createdAt: thisMonth(15) },
-      { userId: lea.id, amount: 681, type: PointsType.km, label: 'Sortie route · Boucle des Yvelines', createdAt: thisMonth(14) },
-      { userId: lea.id, amount: 736, type: PointsType.km, label: 'Sortie longue · Forêt de Rambouillet', createdAt: thisMonth(8) },
-      { userId: lea.id, amount: 4440, type: PointsType.km, label: 'Sorties antérieures (Strava)', createdAt: daysAgo(60) },
+      ...leaRides.map((r) => ({ userId: lea.id, amount: Math.round(r.km * 10), type: PointsType.km, label: r.name, createdAt: r.date })),
+      { userId: lea.id, amount: 2000, type: PointsType.km, label: 'Sorties antérieures (import Strava)', createdAt: daysAgo(75) },
       { userId: lea.id, amount: 2000, type: PointsType.purchase, label: 'Achat activé · Power Cup 700×28', createdAt: thisMonth(12) },
       { userId: lea.id, amount: 4200, type: PointsType.purchase, label: 'Achats antérieurs Michelin', createdAt: daysAgo(90) },
+      { userId: lea.id, amount: 1000, type: PointsType.referral, label: 'Parrainage · Inès Caron', createdAt: daysAgo(20) },
     ],
   });
   await db.activity.createMany({
     data: [
-      { userId: lea.id, name: 'Sortie gravel · Vallée de Chevreuse', distanceKm: 42.3, elevation: 1240, pointsAwarded: 423, source: ActivitySource.strava_mock, date: thisMonth(15) },
-      { userId: lea.id, name: 'Sortie route · Boucle des Yvelines', distanceKm: 68.1, elevation: 720, pointsAwarded: 681, source: ActivitySource.strava_mock, date: thisMonth(14) },
+      ...leaRides.map((r) => ({ userId: lea.id, name: r.name, distanceKm: r.km, elevation: r.elevation, pointsAwarded: Math.round(r.km * 10), source: ActivitySource.strava_mock, date: r.date })),
       { userId: lea.id, name: 'Achat activé · Power Cup 700×28', distanceKm: 0, elevation: 0, pointsAwarded: 2000, source: ActivitySource.purchase, date: thisMonth(12) },
-      { userId: lea.id, name: 'Palier atteint · Titane', distanceKm: 0, elevation: 0, pointsAwarded: 0, source: ActivitySource.tier, date: thisMonth(5) },
+      { userId: lea.id, name: 'Palier atteint · Titane', distanceKm: 0, elevation: 0, pointsAwarded: 0, source: ActivitySource.tier, date: daysAgo(45) },
     ],
   });
 
@@ -149,11 +166,17 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
       { title: 'Pneus flockés — Édition Léa', image: '/tiers/tires-flockes.png', tierRequired: 'Carbone', cost: 12000, editionNumber: 7, editionTotal: 100, kind: RewardKind.edition },
       { title: 'Gourde Équipe Romain Bardet', image: '/rewards/gourde-bardet.png', tierRequired: 'Titane', cost: 1500, kind: RewardKind.goodie },
       { title: 'Pack stickers Michelin+', image: '/rewards/stickers.png', tierRequired: 'Aluminium', cost: 400, kind: RewardKind.goodie },
-      { title: 'Casquette de course', image: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=900&q=70&sat=-100', tierRequired: 'Aluminium', cost: 800, kind: RewardKind.goodie },
-      { title: 'Maillot édition saison', image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=900&q=70&sat=-100', tierRequired: 'Titane', cost: 3200, kind: RewardKind.goodie },
+      { title: 'Casquette Michelin+ · L’Exception', image: '/rewards/casquette-michelin.png', tierRequired: 'Aluminium', cost: 800, kind: RewardKind.goodie },
+      { title: 'T-shirt Michelin+ · L’Exception', image: '/rewards/maillot-michelin.png', tierRequired: 'Titane', cost: 3200, kind: RewardKind.goodie },
       { title: 'Weekend VIP course Michelin', image: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=900&q=70&sat=-100', tierRequired: 'Carbone', cost: 18000, kind: RewardKind.experience },
     ],
   });
+
+  // Léa has already claimed one goodie → dashboard "Récompenses" reads 1 (real), not 0.
+  const stickers = await db.reward.findFirst({ where: { title: 'Pack stickers Michelin+' } });
+  if (stickers) {
+    await db.redemption.create({ data: { userId: lea.id, rewardId: stickers.id, createdAt: daysAgo(6) } });
+  }
 
   await db.cardCode.createMany({
     data: [
@@ -172,7 +195,7 @@ export async function seedDemo(db: Db): Promise<SeedSummary> {
       maxPoints: 25000,
       rewards: {
         create: [
-          { stage: 14, title: 'T-shirt édition saison', threshold: 7000, image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=900&q=70&sat=-100', epic: false },
+          { stage: 14, title: 'T-shirt édition saison', threshold: 7000, image: '/rewards/maillot-michelin.png', epic: false },
           { stage: 20, title: 'Power Cup Carbone #042', threshold: 10000, image: '/tiers/tires-flockes.png', epic: true },
           { stage: 50, title: 'Pneus signés + Weekend VIP', threshold: 25000, image: '/tiers/tires-flockes.png', epic: true },
         ],

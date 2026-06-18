@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/auth';
 import { awardPoints } from '@/lib/points';
 import { pointsForKm } from '@/lib/tiers';
+import { headlineRewardForTier } from '@/lib/rewards';
 import { ok, handle } from '@/lib/api';
 
 const RIDE_NAMES = [
@@ -37,12 +38,17 @@ export async function POST(req: Request) {
       return awardPoints(user.id, points, 'km', name, { km, elevation }, tx);
     });
 
+    const unlockedReward = result.tierUp
+      ? await headlineRewardForTier(user.id, result.tierUp.name)
+      : null;
+
     return ok({
       activity: { name, km, elevation, points },
       awarded: result.awarded,
       total: result.total,
       tier: result.tier.name,
       tierUp: result.tierUp?.name ?? null,
+      unlockedReward,
     });
   });
 }
