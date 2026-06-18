@@ -2,6 +2,7 @@
 import type { User } from '@prisma/client';
 import { prisma } from './db';
 import { totalPoints } from './points';
+import { currentStreak, pctDelta } from './stats';
 import { tierProgress, type TierName } from './tiers';
 
 export interface FeedItem {
@@ -73,27 +74,6 @@ function startOfLastMonth(): Date {
   return new Date(d.getFullYear(), d.getMonth() - 1, 1);
 }
 
-const DAY_MS = 86400000;
-function dayKey(date: Date): number {
-  return Math.floor(new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() / DAY_MS);
-}
-
-/** Current run of consecutive days (ending today or yesterday) with ≥1 ride. */
-function currentStreak(rideDates: Date[]): number {
-  if (rideDates.length === 0) return 0;
-  const days = new Set(rideDates.map(dayKey));
-  const today = dayKey(new Date());
-  // The streak is "alive" if there's a ride today or yesterday; otherwise it's 0.
-  let cursor = days.has(today) ? today : days.has(today - 1) ? today - 1 : null;
-  if (cursor === null) return 0;
-  let streak = 0;
-  while (days.has(cursor)) {
-    streak++;
-    cursor--;
-  }
-  return streak;
-}
-
 export async function getDashboardState(user: User): Promise<DashboardState> {
   const som = startOfMonth();
   const solm = startOfLastMonth();
@@ -133,8 +113,7 @@ export async function getDashboardState(user: User): Promise<DashboardState> {
     .filter((a) => a.date >= solm && a.date < som)
     .reduce((s, a) => s + a.distanceKm, 0);
   const kmThisMonth = Math.round(kmThisMonthRaw);
-  const kmDeltaPct =
-    kmLastMonthRaw > 0 ? Math.round(((kmThisMonthRaw - kmLastMonthRaw) / kmLastMonthRaw) * 100) : null;
+  const kmDeltaPct = pctDelta(kmThisMonthRaw, kmLastMonthRaw);
   const streakDays = currentStreak(stravaActivities.map((a) => a.date));
 
   const feed: FeedItem[] = activities.map((a) => ({

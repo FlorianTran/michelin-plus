@@ -11,22 +11,26 @@ export interface UnlockedReward {
   edition: string | null;
 }
 
+/** The subset of a Reward the picker needs — keeps the pure helper DB-agnostic. */
+export interface RewardCandidate {
+  id: string;
+  title: string;
+  image: string | null;
+  cost: number;
+  kind: string;
+  editionNumber: number | null;
+  editionTotal: number | null;
+}
+
 /**
- * The headline reward newly unlocked by reaching `tier`: prefer a numbered
- * edition (the signature prestige drop, with its edition badge), otherwise the
- * most prestigious (highest-cost) reward gated on that tier the member hasn't
- * claimed yet. Drives the tier-up celebration pop-up in the member flow.
+ * Pure picker for the headline (most prestigious) reward among a tier's
+ * unredeemed rewards: prefer a numbered `edition` (highest cost wins), else the
+ * highest-cost reward of any kind, else null when there's nothing to show.
  */
-export async function headlineRewardForTier(
-  userId: string,
-  tier: string,
-  db: Db = prisma,
-): Promise<UnlockedReward | null> {
-  const where = { tierRequired: tier, redemptions: { none: { userId } } } as const;
-  const r =
-    (await db.reward.findFirst({ where: { ...where, kind: 'edition' }, orderBy: { cost: 'desc' } })) ??
-    (await db.reward.findFirst({ where, orderBy: { cost: 'desc' } }));
-  if (!r) return null;
+export function pickHeadlineReward(rewards: RewardCandidate[]): UnlockedReward | null {
+  if (rewards.length === 0) return null;
+  const byCostDesc = [...rewards].sort((a, b) => b.cost - a.cost);
+  const r = byCostDesc.find((x) => x.kind === 'edition') ?? byCostDesc[0];
   return {
     id: r.id,
     title: r.title,
@@ -36,4 +40,21 @@ export async function headlineRewardForTier(
         ? `#${String(r.editionNumber).padStart(3, '0')} / ${r.editionTotal}`
         : null,
   };
+}
+
+/**
+ * The headline reward newly unlocked by reaching `tier`: fetches the tier's
+ * unredeemed rewards once and delegates the choice to {@link pickHeadlineReward}.
+ * Drives the tier-up celebration pop-up in the member flow.
+ */
+export async function headlineRewardForTier(
+  userId: string,
+  tier: string,
+  db: Db = prisma,
+): Promise<UnlockedReward | null> {
+  const rewards = await db.reward.findMany({
+    where: { tierRequired: tier, redemptions: { none: { userId } } },
+    orderBy: { cost: 'desc' },
+  });
+  return pickHeadlineReward(rewards);
 }
