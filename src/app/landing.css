@@ -191,8 +191,9 @@
   position: relative;
   width: 100%;
   margin-top: 4px;
-  aspect-ratio: 16 / 9;
-  max-height: 82vh;
+  /* match the source clip (1280×712) so it fills edge-to-edge with no crop and no
+     letterbox bars — height scales proportionally with width */
+  aspect-ratio: 1280 / 712;
   overflow: hidden;
   background: #08090c;
   isolation: isolate;
@@ -211,15 +212,11 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* contain = never crop the frame (step numbers stay visible); any spare space
+     is dark letterbox that blends into the page */
+  object-fit: contain;
   z-index: 0;
   background: #08090c;
-}
-@media (max-width: 600px) {
-  .lp-video-bleed {
-    aspect-ratio: 9 / 12;
-    max-height: 78vh;
-  }
 }
 
 /* ---- PROBLEM → SOLUTION ---- */
