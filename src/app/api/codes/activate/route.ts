@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/auth';
 import { awardPoints } from '@/lib/points';
+import { headlineRewardForTier } from '@/lib/rewards';
 import { ok, fail, handle } from '@/lib/api';
 
 /** Activate a product card code → credit real points (and maybe a tier-up). */
@@ -38,12 +39,17 @@ export async function POST(req: Request) {
       );
     });
 
+    const unlockedReward = result.tierUp
+      ? await headlineRewardForTier(user.id, result.tierUp.name)
+      : null;
+
     return ok({
       awarded: result.awarded,
       total: result.total,
       product: card.productLabel,
       tier: result.tier.name,
       tierUp: result.tierUp?.name ?? null,
+      unlockedReward,
     });
   });
 }

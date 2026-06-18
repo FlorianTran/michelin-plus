@@ -40,9 +40,15 @@ export interface DashboardState {
   };
   stats: {
     kmThisMonth: number;
+    /** % change vs last calendar month; null when there is no prior-month baseline. */
+    kmDeltaPct: number | null;
     clanRank: number | null;
     clanSize: number | null;
+    /** Current run of consecutive days with a ride (Strava). */
+    streakDays: number;
     rewardsCount: number;
+    /** Rewards claimed this calendar month (for the stat delta). */
+    rewardsThisMonth: number;
   };
   feed: FeedItem[];
   clan: { id: string; name: string } | null;
@@ -62,16 +68,45 @@ function startOfMonth(): Date {
   return new Date(d.getFullYear(), d.getMonth(), 1);
 }
 
+function startOfLastMonth(): Date {
+  const d = new Date();
+  return new Date(d.getFullYear(), d.getMonth() - 1, 1);
+}
+
+const DAY_MS = 86400000;
+function dayKey(date: Date): number {
+  return Math.floor(new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() / DAY_MS);
+}
+
+/** Current run of consecutive days (ending today or yesterday) with ≥1 ride. */
+function currentStreak(rideDates: Date[]): number {
+  if (rideDates.length === 0) return 0;
+  const days = new Set(rideDates.map(dayKey));
+  const today = dayKey(new Date());
+  // The streak is "alive" if there's a ride today or yesterday; otherwise it's 0.
+  let cursor = days.has(today) ? today : days.has(today - 1) ? today - 1 : null;
+  if (cursor === null) return 0;
+  let streak = 0;
+  while (days.has(cursor)) {
+    streak++;
+    cursor--;
+  }
+  return streak;
+}
+
 export async function getDashboardState(user: User): Promise<DashboardState> {
-  const [entries, activities, redemptionsCount, membership] = await Promise.all([
+  const som = startOfMonth();
+  const solm = startOfLastMonth();
+  const [entries, activities, stravaActivities, redemptionsCount, rewardsThisMonth, membership] = await Promise.all([
     prisma.pointsEntry.findMany({ where: { userId: user.id } }),
     prisma.activity.findMany({ where: { userId: user.id }, orderBy: { date: 'desc' }, take: 6 }),
+    prisma.activity.findMany({ where: { userId: user.id, source: 'strava_mock' }, orderBy: { date: 'desc' } }),
     prisma.redemption.count({ where: { userId: user.id } }),
+    prisma.redemption.count({ where: { userId: user.id, createdAt: { gte: som } } }),
     prisma.clanMember.findFirst({ where: { userId: user.id }, include: { clan: true } }),
   ]);
 
   const total = entries.reduce((s, e) => s + e.amount, 0);
-  const som = startOfMonth();
   const thisMonth = entries.filter((e) => e.createdAt >= som).reduce((s, e) => s + e.amount, 0);
   const fromPurchases = entries.filter((e) => e.type === 'purchase').reduce((s, e) => s + e.amount, 0);
   const fromKm = entries.filter((e) => e.type === 'km').reduce((s, e) => s + e.amount, 0);
@@ -92,11 +127,15 @@ export async function getDashboardState(user: User): Promise<DashboardState> {
     clanRank = roster.findIndex((m) => m.userId === user.id) + 1 || null;
   }
 
-  const kmThisMonth = Math.round(
-    activities
-      .filter((a) => a.date >= som && a.source === 'strava_mock')
-      .reduce((s, a) => s + a.distanceKm, 0),
-  );
+  // Real km stats from the full Strava set: this month, vs last month, current streak.
+  const kmThisMonthRaw = stravaActivities.filter((a) => a.date >= som).reduce((s, a) => s + a.distanceKm, 0);
+  const kmLastMonthRaw = stravaActivities
+    .filter((a) => a.date >= solm && a.date < som)
+    .reduce((s, a) => s + a.distanceKm, 0);
+  const kmThisMonth = Math.round(kmThisMonthRaw);
+  const kmDeltaPct =
+    kmLastMonthRaw > 0 ? Math.round(((kmThisMonthRaw - kmLastMonthRaw) / kmLastMonthRaw) * 100) : null;
+  const streakDays = currentStreak(stravaActivities.map((a) => a.date));
 
   const feed: FeedItem[] = activities.map((a) => ({
     id: a.id,
@@ -151,7 +190,7 @@ export async function getDashboardState(user: User): Promise<DashboardState> {
       tone: prog.current.tone,
       perks: prog.current.perks,
     },
-    stats: { kmThisMonth, clanRank, clanSize, rewardsCount: redemptionsCount },
+    stats: { kmThisMonth, kmDeltaPct, clanRank, clanSize, streakDays, rewardsCount: redemptionsCount, rewardsThisMonth },
     feed,
     clan,
     nextReward,

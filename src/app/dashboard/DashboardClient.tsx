@@ -12,6 +12,7 @@ import { apiGet, apiPost } from '@/lib/client-api';
 import type { DashboardState } from '@/lib/dashboard';
 
 interface LeaderRow { rank: number; name: string; meta: string; km: number; you: boolean; avatar: string | null }
+interface UnlockedReward { id: string; title: string; image: string | null; edition: string | null }
 
 const ic = {
   bolt: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" /></svg>,
@@ -39,10 +40,24 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
   const [codeInput, setCodeInput] = React.useState('');
   const [clanOpen, setClanOpen] = React.useState(false);
   const [clanCode, setClanCode] = React.useState('');
-  const [unlock, setUnlock] = React.useState<{ title: string; image: string | null; edition: string | null } | null>(null);
+  const [unlock, setUnlock] = React.useState<{ title: string; image: string | null; edition: string | null; eyebrow?: string; description?: string } | null>(null);
   const { toasts, push, dismiss } = useToasts();
 
   const accent = state.tier.current === 'Carbone' ? 'prestige' : 'energy';
+
+  // Reaching a tier (via Strava or card activation) unlocks a reward → claim it for
+  // real, then fire the celebration pop-up. Real progress, real redemption.
+  async function celebrateTierUp(tierName: string, reward: UnlockedReward) {
+    let shown: { title: string; image: string | null; edition: string | null } = reward;
+    try {
+      const r = await apiPost<{ reward: { title: string; image: string | null; edition: string | null } }>(`/api/rewards/${reward.id}/redeem`);
+      shown = r.reward;
+    } catch {
+      /* already claimed — celebrate with what we have */
+    }
+    setUnlock({ ...shown, eyebrow: `Palier ${tierName} atteint`, description: 'Ton nouveau palier débloque cette récompense — elle est ajoutée à ton espace membre.' });
+    await refresh();
+  }
 
   async function refresh() {
     const next = await apiGet<DashboardState>('/api/dashboard');
@@ -56,7 +71,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
   async function syncStrava() {
     setBusy(true);
     try {
-      const res = await apiPost<{ activity: { name: string; km: number; points: number }; awarded: number; tierUp: string | null }>('/api/strava/sync');
+      const res = await apiPost<{ activity: { name: string; km: number; points: number }; awarded: number; tierUp: string | null; unlockedReward: UnlockedReward | null }>('/api/strava/sync');
       await refresh();
       push({
         tone: res.tierUp ? 'prestige' : 'energy',
@@ -65,6 +80,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
         points: `+${res.awarded.toLocaleString('fr-FR')} pts`,
         icon: ic.sync,
       });
+      if (res.tierUp && res.unlockedReward) await celebrateTierUp(res.tierUp, res.unlockedReward);
     } catch (e) {
       push({ tone: 'info', title: 'Erreur', message: e instanceof Error ? e.message : '' });
     } finally {
@@ -76,7 +92,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
     if (!codeInput.trim()) return;
     setBusy(true);
     try {
-      const res = await apiPost<{ awarded: number; product: string; tierUp: string | null }>('/api/codes/activate', { code: codeInput });
+      const res = await apiPost<{ awarded: number; product: string; tierUp: string | null; unlockedReward: UnlockedReward | null }>('/api/codes/activate', { code: codeInput });
       setActivateOpen(false);
       setCodeInput('');
       await refresh();
@@ -86,6 +102,7 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
         message: res.product,
         points: `+${res.awarded.toLocaleString('fr-FR')} pts`,
       });
+      if (res.tierUp && res.unlockedReward) await celebrateTierUp(res.tierUp, res.unlockedReward);
     } catch (e) {
       push({ tone: 'info', title: 'Activation refusée', message: e instanceof Error ? e.message : '' });
     } finally {
@@ -185,10 +202,10 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
           </Card>
 
           {/* STATS */}
-          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="KM ce mois" value={stats.kmThisMonth} unit="km" delta="+12%" tone="energy" icon={ic.bike} /></Card>
-          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Rang clan" value={stats.clanRank ? `#${stats.clanRank}` : '—'} unit={stats.clanSize ? `/ ${stats.clanSize}` : ''} delta="+2" tone="prestige" icon={ic.trophy} /></Card>
-          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Série en cours" value={14} unit="jours" delta="record" icon={ic.flame} /></Card>
-          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Récompenses" value={stats.rewardsCount} delta="+1" icon={ic.gift} /></Card>
+          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="KM ce mois" value={stats.kmThisMonth} unit="km" delta={stats.kmDeltaPct != null ? `${stats.kmDeltaPct >= 0 ? '+' : ''}${stats.kmDeltaPct}%` : null} deltaUp={(stats.kmDeltaPct ?? 0) >= 0} tone="energy" icon={ic.bike} /></Card>
+          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Rang clan" value={stats.clanRank ? `#${stats.clanRank}` : '—'} unit={stats.clanSize ? `/ ${stats.clanSize}` : ''} delta={null} tone="prestige" icon={ic.trophy} /></Card>
+          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Série en cours" value={stats.streakDays} unit={stats.streakDays > 1 ? 'jours' : 'jour'} delta={null} icon={ic.flame} /></Card>
+          <Card variant="solid" padding="lg" className="b-stat"><StatTile label="Récompenses" value={stats.rewardsCount} delta={stats.rewardsThisMonth > 0 ? `+${stats.rewardsThisMonth}` : null} icon={ic.gift} /></Card>
 
           {/* FEED */}
           <Card variant="glass" padding="lg" className="feed-tile b-feed">
@@ -285,10 +302,11 @@ export function DashboardClient({ initial, leaderboard }: { initial: DashboardSt
       {unlock && (
         <UnlockDialog
           open
+          eyebrow={unlock.eyebrow ?? 'Récompense débloquée'}
           title={unlock.title}
           image={unlock.image}
           edition={unlock.edition}
-          description="Bravo ! Cette récompense est ajoutée à ton espace membre."
+          description={unlock.description ?? 'Bravo ! Cette récompense est ajoutée à ton espace membre.'}
           onPrimary={() => { setUnlock(null); push({ tone: 'prestige', title: 'Ajoutée à tes récompenses' }); }}
           onClose={() => setUnlock(null)}
           secondaryLabel="Fermer"
