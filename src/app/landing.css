@@ -606,6 +606,9 @@
 }
 .lp-soon__tile {
   position: relative;
+  /* keep a stacking context at all times so the z-index:-2 bg image stays contained.
+     Without this, .mch-reveal.in sets transform:none → context drops → image escapes. */
+  isolation: isolate;
   border-radius: var(--radius-md);
   overflow: hidden;
   min-height: 260px;
@@ -647,6 +650,9 @@
 /* ---- AMBASSADOR ---- */
 .lp-ambassador {
   position: relative;
+  /* permanent stacking context — keeps the z-index:-2 bg photo contained even after
+     .mch-reveal.in drops the transform (otherwise the photo escapes and vanishes). */
+  isolation: isolate;
   border-radius: var(--radius-xl);
   overflow: hidden;
   padding: clamp(36px, 5vw, 64px);
