@@ -51,6 +51,9 @@ services:
       DATABASE_URL: "postgresql://${POSTGRES_USER:-michelin}:${POSTGRES_PASSWORD:-michelin}@db:5432/${POSTGRES_DB:-michelin_plus}?schema=public"
       SESSION_SECRET: ${SESSION_SECRET:-change-me-in-prod-32-bytes-minimum-please-ok}
       DEBUG_TOKEN: ${DEBUG_TOKEN:-grip}
+      # Set COOKIE_SECURE=false when serving the demo over plain HTTP (bare IP, no TLS),
+      # otherwise the Secure session cookie is dropped by the browser and login "does nothing".
+      COOKIE_SECURE: ${COOKIE_SECURE:-}
       NODE_ENV: production
     ports:
       - "${APP_PORT:-3000}:3000"

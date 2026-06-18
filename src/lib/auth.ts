@@ -14,6 +14,18 @@ function secret(): Uint8Array {
   return new TextEncoder().encode(s);
 }
 
+/**
+ * Whether to mark the session cookie `Secure`. Defaults to on in production,
+ * but can be forced off via `COOKIE_SECURE=false` for a demo served over plain
+ * HTTP — browsers silently drop a `Secure` cookie over `http://`, which would
+ * make every login appear to "do nothing" (the session never persists).
+ */
+function cookieSecure(): boolean {
+  if (process.env.COOKIE_SECURE === 'false') return false;
+  if (process.env.COOKIE_SECURE === 'true') return true;
+  return process.env.NODE_ENV === 'production';
+}
+
 export async function hashPassword(plain: string): Promise<string> {
   return bcrypt.hash(plain, 10);
 }
@@ -37,7 +49,7 @@ export async function createSession(userId: string): Promise<void> {
   jar.set(COOKIE, token, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: cookieSecure(),
     path: '/',
     maxAge: MAX_AGE,
   });
