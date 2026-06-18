@@ -43,10 +43,8 @@ export function Footer({
     .mch-footer__grid{max-width:var(--container-max);margin:0 auto;display:grid;
       grid-template-columns:minmax(220px,1.5fr) repeat(3,minmax(0,1fr));gap:40px;align-items:start;}
     .mch-footer__brand{display:flex;flex-direction:column;gap:14px;}
-    .mch-footer__hello{display:flex;align-items:center;gap:10px;}
     .mch-footer__wordmark{font-family:var(--font-wordmark);font-style:italic;font-weight:800;font-size:1.7rem;text-transform:uppercase;letter-spacing:-.01em;color:#fff;}
     .mch-footer__wordmark b{font-weight:900;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-    .mch-footer__hellotxt{font-family:var(--font-display);font-weight:900;font-size:1.05rem;color:var(--mch-yellow);text-transform:uppercase;}
     .mch-footer__tag{font-family:var(--font-body);font-size:.875rem;color:var(--text-secondary);max-width:34ch;line-height:1.5;}
     .mch-footer__col h5{font-family:var(--font-body);font-weight:700;font-size:.6875rem;letter-spacing:.14em;
       text-transform:uppercase;color:var(--text-tertiary);margin-bottom:14px;}
@@ -75,10 +73,7 @@ export function Footer({
       <div className="mch-footer__tread" />
       <div className="mch-footer__grid">
         <div className="mch-footer__brand">
-          <div className="mch-footer__hello">
-            <span className="mch-footer__wordmark">Michelin<b>+</b></span>
-            <span className="mch-footer__hellotxt">Hello&nbsp;!</span>
-          </div>
+          <span className="mch-footer__wordmark">Michelin<b>+</b></span>
           <p className="mch-footer__tag">{tagline}</p>
         </div>
         {columns.map((c, i) => (
