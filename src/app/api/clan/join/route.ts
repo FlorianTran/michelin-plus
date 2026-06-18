@@ -17,12 +17,12 @@ export async function POST(req: Request) {
     if (!profile) return fail('Code ambassadeur inconnu', 404);
 
     const clan = await prisma.clan.findFirst({ where: { ambassadorUserId: profile.userId } });
-    if (!clan) return fail("Cet ambassadeur n'anime pas encore de clan", 404);
+    if (!clan) return fail("Cet ambassadeur n'anime pas encore d'équipe", 404);
 
     const existing = await prisma.clanMember.findUnique({
       where: { clanId_userId: { clanId: clan.id, userId: user.id } },
     });
-    if (existing) return fail('Tu fais déjà partie de ce clan', 409);
+    if (existing) return fail('Tu fais déjà partie de cette équipe', 409);
 
     await prisma.clanMember.create({ data: { clanId: clan.id, userId: user.id, km: 0 } });
     const size = await prisma.clanMember.count({ where: { clanId: clan.id } });
