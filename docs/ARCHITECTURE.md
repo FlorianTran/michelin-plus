@@ -51,9 +51,14 @@ Navigateur ──► Next.js (RSC + Route Handlers) ──► Prisma ──► P
 - `pointsForKm(km)` = `km × 10` (conversion Strava mock).
 - `awardPoints(userId, amount, type, label, meta)` crée une `PointsEntry` et renvoie
   `{ total, tier, tierUp }` — utilisé par activation, sync, et debug, le tout en transaction.
+- `src/lib/stats.ts` (pur) : `currentStreak(rides, today?)` (jours consécutifs avec sortie) et
+  `pctDelta(courant, base)` (delta % vs mois dernier, `null` sans base) alimentent les stats du dashboard.
+- `src/lib/rewards.ts` : `pickHeadlineReward(rewards)` (pur — édition la plus chère, sinon coût max)
+  derrière `headlineRewardForTier` qui pilote la **pop-up de palier** (récompense vedette débloquée).
 
-Tests : `src/lib/tiers.test.ts` (16 cas — bornes de paliers, jauge de Léa, tier-up, conversion km,
-arithmétique d'activation).
+Tests : `src/lib/tiers.test.ts` (bornes de paliers, jauge de Léa, tier-up, conversion km,
+arithmétique d'activation), `src/lib/stats.test.ts` (série & delta km), `src/lib/rewards.test.ts`
+(sélection de la récompense vedette).
 
 ## API (Route Handlers)
 

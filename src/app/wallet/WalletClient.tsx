@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import './wallet.css';
-import { Card, Badge, Button } from '@/components/grip';
+import { Card, Badge } from '@/components/grip';
 import { AppHeader } from '@/components/site/AppHeader';
 import { BottomTabBar } from '@/components/site/BottomTabBar';
 import { PhoneFrame } from '@/components/site/PhoneFrame';
@@ -136,15 +136,6 @@ export function WalletClient({ card, authed }: WalletClientProps) {
                 </span>
               </span>
               <Badge tone="neutral">Bientôt</Badge>
-            </div>
-
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <Button variant="ghost" size="sm" disabled iconLeft={ic.apple} style={{ opacity: 0.55 }}>
-                Ajouter à Apple Wallet
-              </Button>
-              <Button variant="ghost" size="sm" disabled iconLeft={ic.google} style={{ opacity: 0.55 }}>
-                Ajouter à Google Wallet
-              </Button>
             </div>
 
             <p className="wallet__add-note">
