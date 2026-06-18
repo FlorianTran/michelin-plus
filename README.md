@@ -6,10 +6,10 @@ Programme communautaire & de fidélité pour cyclistes premium — application d
 Michelin+ crée la demande **sans boutique directe** : une carte glissée dans l'emballage active
 le digital **après l'achat**. On gagne des points (achats + kilomètres), on grimpe **3 paliers**
 (Aluminium → Titane → Carbone), on débloque récompenses et **éditions numérotées**, et on rejoint
-le **clan** d'un ambassadeur.
+l'**équipe** d'un ambassadeur.
 
 > **Réel vs mock.** Le moteur de valeur est **réel** (DB Postgres, points, paliers, codes
-> d'activation, clans/classement, récompenses). Les **entrées** sont **mockées** : Strava (bouton
+> d'activation, équipes/classement, récompenses). Les **entrées** sont **mockées** : Strava (bouton
 > « Synchroniser ») et achats (saisie d'un code carte). Wallet / carte physique / goodies =
 > **vitrine** labellisée. Démo non affiliée officiellement à Michelin.
 
@@ -31,7 +31,7 @@ cp .env.example .env        # valeurs de dev par défaut (déjà correctes)
 
 # 3. Schéma + données de démo
 npx prisma db push          # crée les tables
-npm run db:seed             # Léa, Thomas, clan Gravel Lyon, récompenses, codes…
+npm run db:seed             # Léa, Romain Bardet, équipe « Équipe Bardet », récompenses, codes…
 
 # 4. Lancer
 npm run dev                 # http://localhost:3000
@@ -42,21 +42,21 @@ npm run dev                 # http://localhost:3000
 | Compte | Email | Rôle | Palier |
 |---|---|---|---|
 | **Léa Moreau** | `lea@michelin.plus` | membre | Titane (12 838 pts) |
-| **Thomas Vidal** | `thomas@michelin.plus` | ambassadeur | Carbone |
+| **Romain Bardet** | `romain@michelin.plus` | ambassadeur | Carbone |
 
-Raccourci : `/login` propose des boutons « Entrer comme Léa / Thomas ».
+Raccourci : `/login` propose des boutons « Entrer comme Léa / Romain Bardet ».
 **Codes d'activation** : `GRIP-2000`, `MICH-CLASSIC`, `CARBON-CDM`, `PILOT-SPORT`, `AMBASS-2026`.
 
 ## Parcours démo (happy path)
 
 1. `/login` → « Entrer comme Léa ».
 2. Dashboard → stats **calculées** depuis la DB : km du mois (+ delta vs mois dernier),
-   série de jours consécutifs, rang dans le clan, points par source.
+   série de jours consécutifs, rang dans l'équipe, points par source.
 3. **Activer une carte** → saisir `CARBON-CDM` (+3 000 pts) → Léa passe **Titane → Carbone**.
 4. **Pop-up de palier** : l'édition numérotée nouvellement débloquée s'affiche en récompense vedette.
 5. `/rewards` → catalogue réel, dont la **casquette** et le **t-shirt** « L'Exception » → *Débloquer*.
 6. `/parrainage` → lien partageable + filleule **Inès** (parrainage réel, points gagnés).
-7. Rejoindre le clan **Gravel Lyon** via le code **`VIDAL-LYON`** → le classement se réordonne en direct.
+7. Rejoindre l'**Équipe Bardet** via le code **`BARDET-LYON`** → le classement se réordonne en direct.
 8. `/wallet` → la carte digitale **Carbone** de Léa (solde, palier, n° de membre), prête à présenter.
 
 ### Page debug — `/debug`
@@ -70,12 +70,12 @@ complet de la démo. Indispensable pour piloter la présentation sans dépendre 
 | Route | Écran | Données |
 |---|---|---|
 | `/` | Landing (hero B&W animé, narratif, paliers, ambassadeur) | statique |
-| `/dashboard` | Tableau de bord membre (bento : compteur, jauge, feed, clan, carte) | **DB réelle** |
+| `/dashboard` | Tableau de bord membre (bento : compteur, jauge, feed, équipe, carte) | **DB réelle** |
 | `/tiers` | Les 3 paliers (cartes alu / titane / carbone) | moteur de paliers |
 | `/rewards` | Catalogue de récompenses + déblocage | **DB réelle** |
-| `/ambassador-dashboard` | Espace ambassadeur (code, commission, clan) | **DB réelle** |
+| `/ambassador-dashboard` | Espace ambassadeur (code, commission, équipe) | **DB réelle** |
 | `/programme-ambassadeur` | Recrutement ambassadeur (Romain Bardet) | statique |
-| `/passe-saison` | Passe Saison « L'Ascension » (ladder + missions) | **DB réelle** |
+| `/passe-saison` | Étapes « L'Ascension » (ladder + missions) | **DB réelle** |
 | `/parrainage` | Parrainage : lien partageable, filleuls, points gagnés | **DB réelle** |
 | `/parrainage/[code]` | Page d'invitation publique (« X t'invite ») | **DB réelle** |
 | `/wallet` | Vitrine carte digitale + **carte physique carbone** | vitrine |
@@ -108,3 +108,4 @@ npm run db:reset     # reset migrations + reseed
 Voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modèle de données, contrats d'API, moteur de
 points/paliers, flux d'authentification, et frontière réel/mock. Design : [`docs/DESIGN_DIRECTION.md`](docs/DESIGN_DIRECTION.md)
 et [`docs/DESIGN_TOKENS.md`](docs/DESIGN_TOKENS.md). Concept produit : [`docs/SOLUTION.md`](docs/SOLUTION.md).
+Guide utilisateur final (membre & ambassadeur) : [`docs/GUIDE_UTILISATEUR.md`](docs/GUIDE_UTILISATEUR.md).

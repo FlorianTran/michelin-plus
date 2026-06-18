@@ -36,7 +36,7 @@ export default async function InvitePage({ params }: { params: Promise<{ code: s
             <div className="inv__perks">
               <Badge tone="energy" dot>Carte de membre offerte</Badge>
               <Badge tone="prestige" dot>+{REFERRAL_BONUS.toLocaleString('fr-FR')} pts pour ton parrain</Badge>
-              <Badge tone="blue" dot>Accès au clan</Badge>
+              <Badge tone="blue" dot>Accès à l’équipe</Badge>
             </div>
             <div className="inv__cta">
               <Link href={joinHref} className="inv__btn inv__btn--primary">Rejoindre le club</Link>

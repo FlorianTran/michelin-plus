@@ -4,7 +4,7 @@ import { CookieBanner } from '@/components/site/CookieBanner';
 
 const SITE_TITLE = 'Michelin+ — Le club des cyclistes premium';
 const SITE_DESCRIPTION =
-  'Chaque kilomètre te rapproche de l’exception. Points, paliers, éditions numérotées, clans — le programme communautaire Michelin+ (démo hackathon).';
+  'Chaque kilomètre te rapproche de l’exception. Points, paliers, éditions numérotées, équipes — le programme communautaire Michelin+ (démo hackathon).';
 const OG_IMAGE = '/cards/card-carbon-premium.png';
 
 export const metadata: Metadata = {

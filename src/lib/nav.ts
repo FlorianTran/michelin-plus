@@ -4,9 +4,8 @@ import type { HeaderLink, FooterColumn } from '@/components/grip';
 export const MARKETING_NAV: HeaderLink[] = [
   { label: 'Comment ça marche', href: '/#how' },
   { label: 'Paliers', href: '/tiers' },
-  { label: 'Saison', href: '/passe-saison' },
+  { label: 'Étapes', href: '/passe-saison' },
   { label: 'Ambassadeur', href: '/programme-ambassadeur' },
-  { label: 'Revendeurs', href: '/revendeurs' },
 ];
 
 export const APP_NAV: { label: string; href: string; key: string }[] = [
@@ -22,7 +21,7 @@ export type MemberTabIcon = 'home' | 'gift' | 'clan' | 'card';
 export const MEMBER_TABS: { label: string; href: string; icon: MemberTabIcon }[] = [
   { label: 'Accueil', href: '/dashboard', icon: 'home' },
   { label: 'Récompenses', href: '/rewards', icon: 'gift' },
-  { label: 'Clan', href: '/parrainage', icon: 'clan' },
+  { label: 'Équipe', href: '/parrainage', icon: 'clan' },
   { label: 'Carte', href: '/wallet', icon: 'card' },
 ];
 
@@ -32,7 +31,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     links: [
       { label: 'Comment ça marche', href: '/#how' },
       { label: 'Paliers', href: '/tiers' },
-      { label: 'Passe Saison', href: '/passe-saison' },
+      { label: 'Étapes', href: '/passe-saison' },
     ],
   },
   {
@@ -41,7 +40,6 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: 'Espace membre', href: '/dashboard' },
       { label: 'Ambassadeurs', href: '/programme-ambassadeur' },
       { label: 'Récompenses', href: '/rewards' },
-      { label: 'Revendeurs', href: '/revendeurs' },
     ],
   },
   {

@@ -20,7 +20,7 @@ describe('referral codes', () => {
 describe('referralLink', () => {
   it('builds an absolute invite URL and trims a trailing slash', () => {
     expect(referralLink('LEA-2024', 'https://michelin.plus/')).toBe('https://michelin.plus/parrainage/LEA-2024');
-    expect(referralLink('VIDAL-26', 'http://localhost:3000')).toBe('http://localhost:3000/parrainage/VIDAL-26');
+    expect(referralLink('BARDET-26', 'http://localhost:3000')).toBe('http://localhost:3000/parrainage/BARDET-26');
   });
 });
 

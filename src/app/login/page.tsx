@@ -42,12 +42,12 @@ export default function LoginPage() {
     }
   }
 
-  async function demoLogin(who: 'lea' | 'thomas') {
+  async function demoLogin(who: 'lea' | 'romain') {
     setError(null);
     setBusy(true);
     try {
       await apiPost('/api/auth/login', { email: `${who}@michelin.plus`, password: 'demo1234' });
-      router.push(who === 'thomas' ? '/ambassador-dashboard' : '/dashboard');
+      router.push(who === 'romain' ? '/ambassador-dashboard' : '/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur');
       setBusy(false);
@@ -109,7 +109,7 @@ export default function LoginPage() {
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <Button variant="blue" size="sm" onClick={() => demoLogin('lea')} disabled={busy}>Entrer comme Léa (membre)</Button>
-              <Button variant="prestige" size="sm" onClick={() => demoLogin('thomas')} disabled={busy}>Entrer comme Thomas (ambassadeur)</Button>
+              <Button variant="prestige" size="sm" onClick={() => demoLogin('romain')} disabled={busy}>Entrer comme Romain Bardet (ambassadeur)</Button>
             </div>
           </Card>
         </div>

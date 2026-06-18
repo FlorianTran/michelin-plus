@@ -1,8 +1,9 @@
 import { prisma } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
+import { totalPoints } from '@/lib/points';
 import { ok, fail, handle } from '@/lib/api';
 
-/** Current season pass (seeded). Season points are SEPARATE from lifetime points. */
+/** Étapes ladder (seeded). Progress is driven by the member's cumulative lifetime points. */
 export async function GET() {
   return handle(async () => {
     const season = await prisma.season.findFirst({
@@ -12,21 +13,15 @@ export async function GET() {
         missions: true,
       },
     });
-    if (!season) return fail('Aucune saison active', 404);
+    if (!season) return fail('Aucun parcours actif', 404);
 
     const user = await getCurrentUser();
-    const progress = user
-      ? await prisma.seasonProgress.findUnique({
-          where: { userId_seasonId: { userId: user.id, seasonId: season.id } },
-        })
-      : null;
-
-    const seasonPoints = progress?.seasonPoints ?? 0;
+    const seasonPoints = user ? await totalPoints(user.id) : 0;
     const stagePoints = season.maxPoints / 50;
     const currentStage = Math.min(50, Math.floor(seasonPoints / stagePoints));
 
     return ok({
-      season: { id: season.id, name: season.name, endsAt: season.endsAt, maxPoints: season.maxPoints },
+      season: { id: season.id, name: season.name, maxPoints: season.maxPoints },
       progress: {
         seasonPoints,
         currentStage,

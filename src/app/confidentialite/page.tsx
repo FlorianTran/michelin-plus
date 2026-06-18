@@ -20,7 +20,7 @@ const SECTIONS = [
   },
   {
     h: 'Profilage & fidélité',
-    p: 'Le calcul des paliers (Aluminium, Titane, Carbone), des récompenses et des classements de clan repose sur l’agrégation de vos points (achats activés + kilomètres). Ce traitement constitue un profilage de fidélité au sens du RGPD. Il sert uniquement à attribuer statuts et récompenses, jamais à une décision produisant des effets juridiques sans intervention humaine.',
+    p: 'Le calcul des paliers (Aluminium, Titane, Carbone), des récompenses et des classements d’équipe repose sur l’agrégation de vos points (achats activés + kilomètres). Ce traitement constitue un profilage de fidélité au sens du RGPD. Il sert uniquement à attribuer statuts et récompenses, jamais à une décision produisant des effets juridiques sans intervention humaine.',
   },
   {
     h: 'Vos droits',
